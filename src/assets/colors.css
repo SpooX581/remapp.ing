@@ -1,0 +1,78 @@
+:root {
+  --h: 210;
+  --c: 0;
+}
+
+/* prettier-ignore */
+.light {
+  /* todo: chroma values that do something */
+  --bg-primary:   lch(93 calc(9  * var(--c)) var(--h));
+  --bg-secondary: lch(89 calc(11 * var(--c)) var(--h));
+  --bg-tertiary:  lch(82 calc(12 * var(--c)) var(--h));
+
+  --bg-floating:        lch(82 calc(10 * var(--c)) var(--h));
+  --bg-floating-active: lch(78 calc(10 * var(--c)) var(--h));
+  --bg-floating-hover:  lch(75 calc(10 * var(--c)) var(--h));
+  --bg-floating-transparent: lch(82 calc(10 * var(--c)) var(--h) / .5);
+
+  --bg-destructive: lch(70 clamp(50, calc(50 * var(--c)), 75) 21);
+
+  --text-c: calc(4.5 * var(--c));
+
+  --text-primary:   lch(27 0 0);
+  --text-secondary: lch(30 var(--text-c) var(--h));
+  --text-tertiary:  lch(40 var(--text-c) var(--h));
+  
+  --text-floating: lch(19 calc(6 * var(--c)) var(--h));
+
+  --text-destructive: lch(10 0 21);
+
+  --border-c: calc(4.5 * var(--c));
+
+  /* todo: look at light border colors more */
+  --border-primary: lch(95 var(--border-c) var(--h));
+  --border-secondary: lch(89 var(--border-c) var(--h));
+  --border-tertiary: lch(87 var(--border-c) var(--h));
+
+  --border-floating: lch(86 var(--border-c) var(--h));
+
+  --border-destructive: lch(60 clamp(50, calc(50 * var(--c)), 75) 21);
+
+  --shadow-floating: lch(0 0 0 / 0.07) 0px 3px 8px, lch(0 0 0 / 0.07) 0px 2px 5px, lch(0 0 0 / 0.07) 0px 1px 1px;
+}
+
+/* prettier-ignore */
+.dark {
+  --bg-primary:   lch(10 calc(9  * var(--c)) var(--h));
+  --bg-secondary: lch(15 calc(11 * var(--c)) var(--h));
+  --bg-tertiary:  lch(20 calc(12 * var(--c)) var(--h));
+
+  --bg-floating:             lch(20 calc(10 * var(--c)) var(--h));
+  --bg-floating-active:      lch(35 calc(10 * var(--c)) var(--h));
+  --bg-floating-hover:       lch(30 calc(10 * var(--c)) var(--h));
+  --bg-floating-transparent: lch(20 calc(10 * var(--c)) var(--h) / .5);
+
+  --bg-destructive: lch(40 clamp(50, calc(50 * var(--c)), 75) 21);
+
+  --text-c: calc(5.664 * var(--c));
+
+  --text-primary:   lch(83 0 0);
+  --text-secondary: lch(70 var(--text-c) var(--h));
+  --text-tertiary:  lch(65 var(--text-c) var(--h));
+
+  --text-floating: lch(90 calc(6 * var(--c)) var(--h));
+
+  --text-destructive: lch(90 0 21);
+
+  --border-c: calc(12 * var(--c));
+
+  --border-primary: lch(10 var(--border-c) var(--h));
+  --border-secondary: lch(15 var(--border-c) var(--h));
+  --border-tertiary: lch(16 var(--border-c) var(--h));
+
+  --border-floating: lch(21 calc(12 * var(--c)) var(--h));
+
+  --border-destructive: lch(60 clamp(50, calc(50 * var(--c)), 75) 21);
+
+  --shadow-floating: lch(0 0 0 / 0.125) 0px 3px 8px, lch(0 0 0 / 0.125) 0px 2px 5px, lch(0 0 0 / 0.125) 0px 1px 1px;
+}

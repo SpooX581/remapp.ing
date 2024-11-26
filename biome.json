@@ -1,0 +1,68 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "organizeImports": {
+    "enabled": true
+  },
+  "formatter": {
+    "indentWidth": 2,
+    "indentStyle": "space",
+    "lineEnding": "lf",
+    "lineWidth": 120
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "all": true,
+      "style": {
+        "useBlockStatements": "off",
+        "useFilenamingConvention": "off",
+        "useNamingConvention": "off",
+        "noDefaultExport": "off",
+        "noNamespaceImport": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off"
+      },
+      "correctness": {
+        "noNodejsModules": "off",
+        "useHookAtTopLevel": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off",
+        "useSimplifiedLogicExpression": "off"
+      },
+      "suspicious": {
+        "noConsole": "off"
+      }
+    }
+  },
+  "overrides": [
+    {
+      "include": ["*.vue"],
+      "linter": {
+        "rules": {
+          "all": false,
+          "recommended": true
+        }
+      }
+    }
+  ],
+  "json": {
+    "parser": {
+      "allowComments": true,
+      "allowTrailingCommas": false
+    },
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
+  "files": {
+    "include": ["*.js", "*.ts", "*.vue", "*.json", "*.css"],
+    "ignore": ["node_modules"]
+  }
+}

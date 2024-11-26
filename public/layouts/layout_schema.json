@@ -1,0 +1,163 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "name": {
+      "description": "Layout name",
+      "type": "string"
+    },
+    "deviceName": {
+      "description": "Exact string to match against deviceName",
+      "type": "string"
+    },
+    "pattern": {
+      "description": "Regex pattern to match against deviceName",
+      "type": "string"
+    },
+    "buttons": {
+      "description": "Physical button layout",
+      "type": "array",
+      "items": {
+        "type": "array",
+        "prefixItems": [
+          { "$ref": "#/$defs/button" },
+          {
+            "description": "X position",
+            "type": "number"
+          },
+          {
+            "description": "Y position",
+            "type": "number"
+          }
+        ],
+        "minItems": 3,
+        "items": false
+      }
+    },
+    "modes": {
+      "description": "Mode configuration",
+      "type": "object",
+      "propertyNames": {
+        "$ref": "#/$defs/mode"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "bindings": {
+            "description": "Button bindings",
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [{ "$ref": "#/$defs/button" }, { "$ref": "#/$defs/binding" }],
+              "minItems": 2,
+              "items": false
+            }
+          },
+          "socd": {
+            "description": "SOCD configuration",
+            "type": "array",
+            "items": {
+              "type": "array",
+              "prefixItems": [
+                { "$ref": "#/$defs/binding" },
+                { "$ref": "#/$defs/binding" },
+                { "$ref": "#/$defs/socdType" }
+              ],
+              "minItems": 3,
+              "items": false
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "additionalProperties": false
+  },
+  "required": ["name"],
+  "oneOf": [{ "required": ["deviceName"] }, { "required": ["pattern"] }],
+  "$defs": {
+    "button": {
+      "description": "Physical button ID",
+      "enum": [
+        0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29,
+        30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57,
+        58, 59
+      ]
+    },
+    "mode": {
+      "description": "Mode ID",
+      "enum": ["melee", "project_m", "ultimate", "fgc", "rivals_of_aether", "keyboard", "custom"]
+    },
+    "binding": {
+      "description": "Binding ID",
+      "enum": [
+        "a",
+        "b",
+        "x",
+        "y",
+        "z",
+        "left_shoulder",
+        "right_shoulder",
+        "left_trigger",
+        "right_trigger",
+        "start",
+        "select",
+        "home",
+        "capture",
+        "mx",
+        "my",
+        "dpad_mod",
+        "dpad_up",
+        "dpad_down",
+        "dpad_left",
+        "dpad_right",
+        "left_stick_click",
+        "left_stick_up",
+        "left_stick_down",
+        "left_stick_left",
+        "left_stick_right",
+        "right_stick_click",
+        "right_stick_up",
+        "right_stick_down",
+        "right_stick_left",
+        "right_stick_right",
+        "kb_a",
+        "kb_b",
+        "kb_c",
+        "kb_d",
+        "kb_e",
+        "kb_f",
+        "kb_g",
+        "kb_h",
+        "kb_i",
+        "kb_j",
+        "kb_k",
+        "kb_l",
+        "kb_m",
+        "kb_n",
+        "kb_o",
+        "kb_p",
+        "kb_q",
+        "kb_r",
+        "kb_s",
+        "kb_t",
+        "kb_u",
+        "kb_v",
+        "kb_w",
+        "kb_x",
+        "kb_y",
+        "kb_z"
+      ]
+    },
+    "socdType": {
+      "description": "SOCD type",
+      "enum": [
+        "neutral",
+        "second_input",
+        "second_input_no_reactivation",
+        "direction_1_priority",
+        "direction_2_priority"
+      ]
+    }
+  }
+}
