@@ -1,2 +1,2 @@
-export const DONATE = 'https://github.com/sponsors/aerokeylabs';
-export const GITHUB = 'https://github.com/aerokeylabs/remapper';
+export const DONATE = 'https://github.com/sponsors/gramctrl';
+export const GITHUB = 'https://github.com/gramctrl/remapp.ing';
