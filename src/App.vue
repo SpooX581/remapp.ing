@@ -70,7 +70,7 @@ watch(route, onRouteSwitch, { immediate: true });
 
     <div class="corner-thing" :class="headerPosition">
       <div class="spacer"></div>
-      <Tooltip>
+      <!-- <Tooltip>
         <TooltipTrigger as-child>
           <a class="btn icon w-16 h-16" :href="DONATE">
             <HeartIcon class="w-10 h-10" />
@@ -79,7 +79,7 @@ watch(route, onRouteSwitch, { immediate: true });
         <TooltipContent side="right" :collision-padding="8">
           <p>Donate <3</p>
         </TooltipContent>
-      </Tooltip>
+      </Tooltip> -->
       <Tooltip>
         <TooltipTrigger as-child>
           <a class="btn icon w-16 h-16" :href="GITHUB">

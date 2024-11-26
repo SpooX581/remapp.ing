@@ -134,7 +134,7 @@ const commands = {
       // serial: ['fn', 'Serial Console', () => router.push('/serial')],
       // editor: ['fn', 'Visual Editor', () => router.push('/editor')],
       github: ['fn', 'GitHub', () => goToLink(GITHUB)],
-      donate: ['fn', 'Donate <3', () => goToLink(DONATE)],
+      // donate: ['fn', 'Donate <3', () => goToLink(DONATE)],
     },
   },
   dev: {
