@@ -26,7 +26,7 @@ const router = useRouter();
 const devBar = useDevBar();
 
 whenever(
-  () => deviceManager.layout && !devBar.value,
+  () => deviceManager.layout, // && !devBar.value
   () => router.push('/mapping'),
   { immediate: true },
 );

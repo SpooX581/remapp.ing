@@ -39,9 +39,10 @@ function noLayoutFound() {
 
 function disconnected() {
   // disable automatically redirecting if devbar is open
-  if (!devBar.value) {
-    router.push('/');
-  }
+  // if (!devBar.value) {
+  //   router.push('/');
+  // }
+  router.push('/');
 }
 
 deviceManager.onNoLayoutFound(noLayoutFound);
