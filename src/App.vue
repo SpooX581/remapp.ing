@@ -57,7 +57,7 @@ watch(route, onRouteSwitch, { immediate: true });
     <Devbar />
 
     <div class="header flex flex-col mb-20" :class="[headerPosition, headerPosition !== 'corner' && 'items-center']">
-      <h1 class="font-light tracking-giga leading-tight">RE:MAPPING</h1>
+      <h1 class="font-light tracking-giga leading-tight">REMAPP.ING</h1>
 
       <div v-if="headerPosition === 'corner'" class="pl-2 text-base">
         <h3>Designed by:</h3>
