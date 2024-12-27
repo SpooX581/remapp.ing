@@ -135,8 +135,8 @@ const commands = {
     condition: undefined,
     label: 'Misc',
     commands: {
-      // serial: ['fn', 'Serial Console', () => router.push('/serial')],
-      // editor: ['fn', 'Visual Editor', () => router.push('/editor')],
+      serial: ['fn', 'Serial Console', () => router.push('/serial')],
+      editor: ['fn', 'Visual Editor', () => router.push('/editor')],
       github: ['fn', 'GitHub', () => goToLink(GITHUB)],
       // donate: ['fn', 'Donate <3', () => goToLink(DONATE)],
     },
