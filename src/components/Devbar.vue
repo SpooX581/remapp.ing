@@ -10,11 +10,25 @@ const devBar = useDevBar();
 
 <template>
   <div v-if="devBar" class="devbar">
-    <RouterLink v-for="route in router.options.routes" :to="route.path" class="text-base hover:underline">
-      {{ route.name ?? route.path }}
-    </RouterLink>
+    <template v-for="route in router.options.routes">
+      <RouterLink v-if="!route.children" :to="route.path">
+        {{ route.name ?? route.path }}
+      </RouterLink>
+      <div v-else class="flex gap-1">
+        <RouterLink :to="route.path" class="mr-2">
+          {{ route.name ?? route.path }}
+        </RouterLink>
+        <span>[</span>
+        <div class="flex gap-4">
+          <RouterLink v-for="child in route.children" :to="`${route.path}/${child.path}`">
+            {{ child.name ?? child.path }}
+          </RouterLink>
+        </div>
+        <span>]</span>
+      </div>
+    </template>
 
-    <a @click="devmgr.connectEmulated" class="text-base hover:underline cursor-pointer"> connect emulated </a>
+    <a @click="devmgr.connectEmulated">connect emulated</a>
   </div>
 </template>
 
@@ -36,6 +50,15 @@ const devBar = useDevBar();
       right: 0;
       height: 2rem;
     }
+  }
+
+  a {
+    @apply hover:underline cursor-pointer;
+  }
+
+  a,
+  span {
+    @apply text-base;
   }
 }
 </style>

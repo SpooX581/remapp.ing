@@ -1,14 +1,14 @@
+import { bindingToPhysical, physicalToBinding } from '@/lib/bindings';
 import type { ButtonBinding, Config, DeviceInfo, GameModeConfig } from '@/lib/config';
 import { ConnectionManager, type ConnectionState } from '@/lib/device';
 import { BUTTON_TO_HAYBOX, HAYBOX_TO_BUTTON } from '@/lib/haybox/buttons';
 import { EmulatedDevice } from '@/lib/haybox/emulated';
 import { HAYBOX_TO_MODE, MODE_TO_HAYBOX } from '@/lib/haybox/modes';
 import { HAYBOX_TO_SOCD, SOCD_TO_HAYBOX } from '@/lib/haybox/socd';
+import type { Layout } from '@/lib/layout';
 import type { GameMode } from '@/lib/modes';
-import { bindingToPhysical, physicalToBinding } from '@/lib/names';
 import type { SocdPair } from '@/lib/socd';
 import * as hb from 'haybox-webserial';
-import type { Layout } from '@/lib/layout';
 
 export class SerialDeviceManager extends ConnectionManager {
   protected port: SerialPort | null = null;

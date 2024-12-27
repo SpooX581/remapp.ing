@@ -25,3 +25,5 @@ export const SOCD_TYPE_NAME = {
   [SOCD_TYPE.DIRECTION_1_PRIORITY]: 'Direction 1 Priority',
   [SOCD_TYPE.DIRECTION_2_PRIORITY]: 'Direction 2 Priority',
 } as const satisfies { [key in SocdType]: string };
+
+export const allSocdTypes = Object.values(SOCD_TYPE) as SocdType[];

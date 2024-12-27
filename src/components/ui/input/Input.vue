@@ -29,19 +29,20 @@ onMounted(() => {
   });
 });
 
-const keys = useMagicKeys();
+const { shift } = useMagicKeys();
 
-const holdingShift = computed(() => keys.shift);
+const step = computed(() => props.step ?? 1);
+const fastStep = computed(() => props.fastStep ?? step.value);
 </script>
 
 <template>
   <input
     ref="input"
     v-model="modelValue"
-    :step="(props.step || props.fastStep) && (holdingShift.value ? props.fastStep ?? props.step : props.step)"
+    :step="(props.step || props.fastStep) && (shift ? fastStep : step)"
     :class="
       cn(
-        'input flex h-8 w-full px-3 py-2 text-sm rounded-md bg-floating text-floating border border-floating file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50',
+        'input flex h-8 w-full px-3 py-2 text-sm rounded-md bg-floating hover:bg-floating-hover transition-colors text-floating border border-floating file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50',
         props.class,
       )
     "

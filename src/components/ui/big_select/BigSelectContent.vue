@@ -50,7 +50,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
   position: relative;
   z-index: 50;
 
-  max-height: 24rem;
+  max-height: 48rem;
   min-width: 8rem;
 
   overflow: hidden;

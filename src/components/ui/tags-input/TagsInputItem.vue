@@ -1,22 +1,31 @@
 <script setup lang="ts">
-import { cn } from '@/lib/utils'
-import { TagsInputItem, type TagsInputItemProps, useForwardProps } from 'radix-vue'
+import { cn } from '@/lib/utils';
+import { TagsInputItem, type TagsInputItemProps, useForwardProps } from 'radix-vue';
+import { type HTMLAttributes, computed } from 'vue';
 
-import { computed, type HTMLAttributes } from 'vue'
-
-const props = defineProps<TagsInputItemProps & { class?: HTMLAttributes['class'] }>()
+const props = defineProps<TagsInputItemProps & { class?: HTMLAttributes['class'] }>();
 
 const delegatedProps = computed(() => {
-  const { class: _, ...delegated } = props
+  const { class: _, ...delegated } = props;
 
-  return delegated
-})
+  return delegated;
+});
 
-const forwardedProps = useForwardProps(delegatedProps)
+const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <TagsInputItem v-bind="forwardedProps" :class="cn('flex h-6 items-center rounded bg-neutral-100 data-[state=active]:ring-neutral-950 data-[state=active]:ring-2 data-[state=active]:ring-offset-2 ring-offset-white dark:bg-neutral-800 dark:data-[state=active]:ring-neutral-300 dark:ring-offset-neutral-950', props.class)">
+  <TagsInputItem
+    v-bind="forwardedProps"
+    class="tags-input-item"
+    :class="cn('h-6 bg-floating-hover rounded', props.class)"
+  >
     <slot />
   </TagsInputItem>
 </template>
+
+<style>
+.tags-input-item {
+  @apply flex items-center transition-colors;
+}
+</style>

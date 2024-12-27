@@ -21,6 +21,7 @@ const config: Config = {
     extend: {
       backgroundColor: {
         primary: 'var(--bg-primary)',
+        something: 'var(--bg-something)',
         secondary: 'var(--bg-secondary)',
         tertiary: 'var(--bg-tertiary)',
         quaternary: 'var(--bg-quaternary)',
@@ -37,6 +38,7 @@ const config: Config = {
         secondary: 'var(--text-secondary)',
         tertiary: 'var(--text-tertiary)',
         quaternary: 'var(--text-quaternary)',
+        muted: 'var(--text-muted)',
         floating: 'var(--text-floating)',
         destructive: 'var(--text-destructive)',
       },
@@ -46,6 +48,16 @@ const config: Config = {
         tertiary: 'var(--border-tertiary)',
         quaternary: 'var(--border-quaternary)',
         floating: 'var(--border-floating)',
+        accent: 'var(--border-accent)',
+        destructive: 'var(--border-destructive)',
+      },
+      stroke: {
+        primary: 'var(--border-primary)',
+        secondary: 'var(--border-secondary)',
+        tertiary: 'var(--border-tertiary)',
+        quaternary: 'var(--border-quaternary)',
+        floating: 'var(--border-floating)',
+        accent: 'var(--border-accent)',
         destructive: 'var(--border-destructive)',
       },
       colors: {

@@ -19,7 +19,7 @@ const forwardedProps = useForwardProps(delegatedProps);
     v-bind="forwardedProps"
     :class="
       cn(
-        'tabs-trigger w-full flex items-center justify-center whitespace-nowrap rounded-md text-floating bg-floating px-2 py-1',
+        'tabs-trigger min-w-[100px] flex flex-grow items-center justify-center text-sm font-semibold whitespace-nowrap rounded-md bg-floating px-2 py-2',
         props.class,
       )
     "
@@ -30,24 +30,19 @@ const forwardedProps = useForwardProps(delegatedProps);
 
 <style>
 .tabs-trigger {
-  cursor: pointer;
-
-  @apply transition-colors;
+  @apply transition-colors cursor-pointer select-none text-secondary;
   transition-property: background-color, color, font-weight;
 
   &[data-state='active'] {
-    background-color: var(--bg-floating-active);
-    color: var(--text-primary);
-    font-weight: 600;
+    @apply bg-floating-active hover:bg-floating-active text-floating font-bold;
   }
 
   &:hover {
-    background-color: var(--bg-floating-hover);
+    @apply bg-floating-hover;
   }
 
   &:disabled {
-    pointer-events: none;
-    opacity: 0.5;
+    @apply pointer-events-none opacity-50;
   }
 }
 </style>

@@ -2,16 +2,16 @@
 import Theme from '@/components/commands/Theme.vue';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
 import { Popover, PopoverContent } from '@/components/ui/popover';
+import { useToast } from '@/components/ui/toast';
 import { useDevBar } from '@/composables/devBar';
 import { useTheme } from '@/composables/theme';
-import { DONATE, GITHUB } from '@/lib/links';
+import { GITHUB } from '@/lib/links';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { useActiveElement, useMagicKeys } from '@vueuse/core';
 import fuzzysort from 'fuzzysort';
 import { PopoverAnchor } from 'radix-vue';
 import { type Component, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { useToast } from './ui/toast';
 
 const activeElement = useActiveElement();
 
@@ -82,6 +82,10 @@ function testToaster() {
   });
 }
 
+function clearLayout() {
+  deviceManager.layout = null;
+}
+
 type SubCommand = ['sub', string, Component];
 type FunctionCommand = ['fn', string, () => void];
 
@@ -143,6 +147,7 @@ const commands = {
     commands: {
       toggleDevbar: ['fn', 'Toggle Dev Bar', toggleDevBar],
       testToaster: ['fn', 'Test Toaster', testToaster],
+      clearSelectedLayout: ['fn', 'Clear Selected Layout', clearLayout],
     },
   },
 } as const satisfies Commands;

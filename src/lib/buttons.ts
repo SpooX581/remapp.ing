@@ -63,3 +63,8 @@ export const PHYSICAL_BUTTON = {
 } as const;
 
 export type PhysicalButton = (typeof PHYSICAL_BUTTON)[keyof typeof PHYSICAL_BUTTON];
+
+/**
+ * Every possible value of `PhysicalButton` including `unspecified`.
+ */
+export const allPhysicalButtons = Object.values(PHYSICAL_BUTTON) as PhysicalButton[];

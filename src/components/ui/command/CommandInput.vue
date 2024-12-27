@@ -10,6 +10,7 @@ defineOptions({
 const props = defineProps<
   ComboboxInputProps & {
     class?: HTMLAttributes['class'];
+    direction?: 'top' | 'bottom';
   }
 >();
 
@@ -23,7 +24,11 @@ const forwardedProps = useForwardProps(delegatedProps);
 </script>
 
 <template>
-  <div class="flex items-center border-b border-secondary px-3" cmdk-input-wrapper>
+  <div
+    class="flex items-center border-secondary px-3"
+    :class="direction === 'top' ? 'border-t' : 'border-b'"
+    cmdk-input-wrapper
+  >
     <ComboboxInput
       v-bind="{ ...forwardedProps, ...$attrs }"
       auto-focus

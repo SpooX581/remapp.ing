@@ -22,7 +22,7 @@ const forwarded = useForwardPropsEmits(props, emits);
 
 <style>
 .command [cmdk-group-heading] {
-  @apply px-2 font-medium text-neutral-500 dark:text-neutral-400;
+  @apply px-2 font-medium text-tertiary;
 }
 
 .command [cmdk-group]:not([hidden]) ~ [cmdk-group] {

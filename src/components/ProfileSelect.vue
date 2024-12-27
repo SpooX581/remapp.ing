@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/big_select';
 import useActiveProfile from '@/composables/activeProfile';
 import { gameModeToName } from '@/lib/modes';
-import { physicalToBinding } from '@/lib/names';
+import { physicalToBinding } from '@/lib/bindings';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { computed } from 'vue';
 

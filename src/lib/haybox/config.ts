@@ -163,6 +163,37 @@ export const defaultConfig = {
       rgbConfig: 0,
     },
     {
+      modeId: GameModeId.MODE_RIVALS_2,
+      name: '',
+      socdPairs: [
+        {
+          buttonDir1: Button.BTN_LF3,
+          buttonDir2: Button.BTN_LF1,
+          socdType: SocdType.SOCD_2IP_NO_REAC,
+        },
+        {
+          buttonDir1: Button.BTN_LF2,
+          buttonDir2: Button.BTN_RF4,
+          socdType: SocdType.SOCD_2IP_NO_REAC,
+        },
+        {
+          buttonDir1: Button.BTN_RT3,
+          buttonDir2: Button.BTN_RT5,
+          socdType: SocdType.SOCD_2IP_NO_REAC,
+        },
+        {
+          buttonDir1: Button.BTN_RT2,
+          buttonDir2: Button.BTN_RT4,
+          socdType: SocdType.SOCD_2IP_NO_REAC,
+        },
+      ],
+      buttonRemapping: [],
+      activationBinding: [Button.BTN_LT1, Button.BTN_MB1, Button.BTN_RF5],
+      customModeConfig: 0,
+      keyboardModeConfig: 0,
+      rgbConfig: 0,
+    },
+    {
       modeId: GameModeId.MODE_KEYBOARD,
       name: '',
       socdPairs: [
@@ -230,11 +261,10 @@ export const defaultConfig = {
     {
       backendId: CommunicationBackendId.COMMS_BACKEND_CONFIGURATOR,
       defaultModeConfig: 0,
-      activationBinding: [Button.BTN_RT2],
+      activationBinding: [Button.BTN_MB1],
       secondaryBackends: [],
     },
   ],
-  customModes: [],
   keyboardModes: [
     {
       id: 0,
@@ -327,9 +357,14 @@ export const defaultConfig = {
           button: Button.BTN_RT2,
           keycode: 25,
         },
+        {
+          button: Button.BTN_LF5,
+          keycode: 26,
+        },
       ],
     },
   ],
+  customModes: [],
   rgbConfigs: [],
   defaultBackendConfig: 1,
   defaultUsbBackendConfig: 1,

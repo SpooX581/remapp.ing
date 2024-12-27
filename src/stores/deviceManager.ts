@@ -41,34 +41,59 @@ export const useDeviceManager = defineStore('device_manager', () => {
   watch(state, async () => {
     if (state.value !== 'connected' || !manager.value) return;
 
-    info.value = (await manager.value.getDeviceInfo()) ?? null;
+    console.info('loading device info');
 
-    if (!info.value) {
-      console.error('failed to get device info');
+    try {
+      info.value = (await manager.value.getDeviceInfo()) ?? null;
+
+      if (!info.value) {
+        console.error('failed to get device info');
+        const { toast } = useToast();
+        toast({
+          variant: 'destructive',
+          title: 'Failed to get device info',
+        });
+
+        return;
+      }
+
+      await loadDeviceLayout(info.value.deviceName);
+      if (!layout.value) {
+        console.warn('no layout found for device:', info.value?.deviceName);
+        notifyNoLayoutFound();
+      }
+    } catch (e) {
+      console.error('failed to get device info', e);
+
       const { toast } = useToast();
       toast({
-        title: 'Failed to get device info',
         variant: 'destructive',
+        title: 'Failed to get device info',
+        description: 'Check the console for more details',
       });
-      return;
-    }
-
-    await loadDeviceLayout(info.value.deviceName);
-    if (!layout.value) {
-      console.warn('no layout found for device:', info.value?.deviceName);
-      notifyNoLayoutFound();
     }
   });
 
   watch(layout, async () => {
     if (!layout.value || !manager.value) return;
 
-    config.value = (await manager.value.getConfig(layout.value)) ?? null;
+    try {
+      config.value = (await manager.value.getConfig(layout.value)) ?? null;
 
-    originalConfig.value = config.value ? config.value : null;
+      originalConfig.value = config.value ? config.value : null;
 
-    console.debug('device info:', info.value);
-    console.debug('device config:', config.value);
+      console.debug('device info:', info.value);
+      console.debug('device config:', config.value);
+    } catch (e) {
+      console.error('failed to get device config', e);
+
+      const { toast } = useToast();
+      toast({
+        variant: 'destructive',
+        title: 'Failed to get device config',
+        description: 'Check the console for more details',
+      });
+    }
   });
 
   const modes = computed<Map<GameMode, GameModeConfig>>(() => {
@@ -126,13 +151,28 @@ export const useDeviceManager = defineStore('device_manager', () => {
 
     writeRemaps();
 
-    if (await manager.value.setConfig(layout.value, config.value)) {
-      originalConfig.value = { ...config.value };
-      notifyConfigSaved();
-      return true;
+    try {
+      if (await manager.value.setConfig(layout.value, config.value)) {
+        originalConfig.value = { ...config.value };
+        notifyConfigSaved();
+        return true;
+      }
+    } catch (e) {
+      console.error('failed to save config', e);
+      const { toast } = useToast();
+      toast({
+        variant: 'destructive',
+        title: 'Failed to save config',
+        description: 'Check the console for more details',
+      });
     }
 
     console.error('failed to save config');
+    const { toast } = useToast();
+    toast({
+      variant: 'destructive',
+      title: 'Failed to save config',
+    });
 
     return false;
   }

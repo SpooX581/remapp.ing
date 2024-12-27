@@ -6,40 +6,28 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('@/viewuwes/index.vue'),
+      component: () => import('@/views/index.vue'),
     },
     {
       path: '/layout',
       name: 'layout',
-      component: () => import('@/viewuwes/layout.vue'),
+      component: () => import('@/views/layout.vue'),
     },
     {
       path: '/mapping',
       name: 'mapping',
-      component: () => import('@/viewuwes/mapping.vue'),
+      component: () => import('@/views/mapping.vue'),
     },
     {
       path: '/serial',
       name: 'serial',
-      component: () => import('@/viewuwes/serial.vue'),
+      component: () => import('@/views/serial.vue'),
     },
-    // {
-    //   path: '/editor',
-    //   name: 'editor',
-    //   component: () => import('@/viewuwes/editor/index.vue'),
-    //   children: [
-    //     {
-    //       path: '',
-    //       name: 'editor-properties',
-    //       component: () => import('@/viewuwes/editor/properties.vue'),
-    //     },
-    //     {
-    //       path: 'layout',
-    //       name: 'editor-layout',
-    //       component: () => import('@/viewuwes/editor/layout.vue'),
-    //     },
-    //   ],
-    // },
+    {
+      path: '/editor',
+      name: 'editor',
+      component: () => import('@/views/editor.vue'),
+    },
   ],
 });
 

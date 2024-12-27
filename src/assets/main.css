@@ -70,6 +70,11 @@ button {
   user-select: none;
 }
 
+input::placeholder,
+textarea::placeholder {
+  @apply text-quaternary;
+}
+
 .btn {
   display: flex;
   justify-content: center;
@@ -124,4 +129,23 @@ svg {
   height: 100%;
 
   overflow: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 8px;
+
+    &:hover::-webkit-scrollbar-thumb {
+      background-color: var(--bg-floating-active);
+    }
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--bg-floating-hover); /* maybe change later */
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--bg-tertiary);
+    border-radius: 1rem;
+  }
 }

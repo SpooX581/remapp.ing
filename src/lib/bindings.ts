@@ -1,3 +1,7 @@
+import { PHYSICAL_BUTTON, type PhysicalButton } from '@/lib/buttons';
+import type { Layout } from '@/lib/layout';
+import type { GameMode } from '@/lib/modes';
+
 export const BINDING = {
   A: 'a',
   B: 'b',
@@ -39,6 +43,9 @@ export const BINDING = {
   RIGHT_STICK_LEFT: 'right_stick_left',
   RIGHT_STICK_RIGHT: 'right_stick_right',
 
+  LIGHT_SHIELD: 'light_shield',
+  MEDIUM_SHIELD: 'medium_shield',
+
   KB_A: 'kb_a',
   KB_B: 'kb_b',
   KB_C: 'kb_c',
@@ -72,3 +79,15 @@ export const BINDING = {
 export type Binding = (typeof BINDING)[keyof typeof BINDING];
 
 export const BINDINGS = Object.values(BINDING);
+
+export function physicalToBinding(layout: Layout, mode: GameMode, button: PhysicalButton): Binding {
+  const binding = layout.modes[mode]?.bindings.find(([physical, _]) => physical === button);
+  return binding?.[1] ?? BINDING.UNSPECIFIED;
+}
+
+export function bindingToPhysical(layout: Layout, mode: GameMode, button: Binding): PhysicalButton {
+  const physical = layout.modes[mode]?.bindings.find(([_, binding]) => binding === button);
+  return physical?.[0] ?? PHYSICAL_BUTTON.UNSPECIFIED;
+}
+
+export const allBindings: Binding[] = Object.values(BINDING);

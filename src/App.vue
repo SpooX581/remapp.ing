@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import CommandPalette from '@/components/CommandPalette.vue';
 import Devbar from '@/components/Devbar.vue';
-import { GithubIcon, HeartIcon } from '@/components/icons';
+import { GithubIcon } from '@/components/icons';
 import { Toaster } from '@/components/ui/toast';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useDevBar } from '@/composables/devBar';
+import { GITHUB } from '@/lib/links';
+import { useDeviceManager } from '@/stores/deviceManager';
 import { ref, watch } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router';
-import { DONATE, GITHUB } from './lib/links';
-import { useDeviceManager } from './stores/deviceManager';
-import { useDevBar } from './composables/devBar';
 
 const route = useRoute();
 

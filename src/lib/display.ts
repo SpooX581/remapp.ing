@@ -21,8 +21,8 @@ export const bindingDisplay: { [key in Binding]: M } = {
   [B.Y]: [KIND.TEXT, 'Y'],
   [B.Z]: [KIND.TEXT, 'Z'],
 
-  [B.LEFT_SHOULDER]: [KIND.TEXT, 'L'],
-  [B.RIGHT_SHOULDER]: [KIND.TEXT, 'R'],
+  [B.LEFT_SHOULDER]: [KIND.TEXT, 'LB'],
+  [B.RIGHT_SHOULDER]: [KIND.TEXT, 'RB'],
 
   [B.LEFT_TRIGGER]: [KIND.TEXT, 'LT'],
   [B.RIGHT_TRIGGER]: [KIND.TEXT, 'RT'],
@@ -41,19 +41,22 @@ export const bindingDisplay: { [key in Binding]: M } = {
   [B.MX]: [KIND.TEXT, 'MX'],
   [B.MY]: [KIND.TEXT, 'MY'],
 
-  [B.LEFT_STICK_CLICK]: [KIND.TEXT, 'LS'],
+  [B.LEFT_STICK_CLICK]: [KIND.TEXT, 'L3'],
 
   [B.LEFT_STICK_UP]: [KIND.ICON, UpIcon],
   [B.LEFT_STICK_DOWN]: [KIND.ICON, DownIcon],
   [B.LEFT_STICK_LEFT]: [KIND.ICON, LeftIcon],
   [B.LEFT_STICK_RIGHT]: [KIND.ICON, RightIcon],
 
-  [B.RIGHT_STICK_CLICK]: [KIND.TEXT, 'RS'],
+  [B.RIGHT_STICK_CLICK]: [KIND.TEXT, 'R3'],
 
   [B.RIGHT_STICK_UP]: [KIND.TEXT_ICON, 'C', UpIcon],
   [B.RIGHT_STICK_DOWN]: [KIND.TEXT_ICON, 'C', DownIcon],
   [B.RIGHT_STICK_LEFT]: [KIND.TEXT_ICON, 'C', LeftIcon],
   [B.RIGHT_STICK_RIGHT]: [KIND.TEXT_ICON, 'C', RightIcon],
+
+  [B.LIGHT_SHIELD]: [KIND.TEXT, 'LS'],
+  [B.MEDIUM_SHIELD]: [KIND.TEXT, 'MS'],
 
   [B.KB_A]: [KIND.TEXT, 'A'],
   [B.KB_B]: [KIND.TEXT, 'B'],
@@ -82,7 +85,7 @@ export const bindingDisplay: { [key in Binding]: M } = {
   [B.KB_Y]: [KIND.TEXT, 'Y'],
   [B.KB_Z]: [KIND.TEXT, 'Z'],
 
-  [B.UNSPECIFIED]: [KIND.TEXT, '???'],
+  [B.UNSPECIFIED]: [KIND.TEXT, ''],
 } as const;
 
 export type BindingDisplay =
@@ -114,5 +117,22 @@ export function getBindingDisplay(binding: Binding): BindingDisplay {
       return { kind: KIND.TEXT_ICON, text: value[1], icon: value[2] };
     default:
       return { kind: KIND.TEXT, text: value[1] };
+  }
+}
+
+export function getBindingDisplayText(binding: Binding): string {
+  const value = bindingDisplay[binding];
+
+  if (!value) {
+    return binding;
+  }
+
+  switch (value[0]) {
+    case KIND.ICON:
+      return '';
+    case KIND.TEXT_ICON:
+      return value[1];
+    default:
+      return value[1];
   }
 }

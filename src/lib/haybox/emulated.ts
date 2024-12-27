@@ -1,6 +1,8 @@
 import { defaultConfig } from '@/lib/haybox/config';
 import { Config, DeviceInfo, HayBoxDevice } from 'haybox-webserial';
 
+const EMULATED_CONFIG_KEY = 'emulated-device-config';
+
 export class EmulatedDevice extends HayBoxDevice {
   constructor() {
     // biome-ignore lint/suspicious/noExplicitAny: not using anything from super
@@ -18,14 +20,14 @@ export class EmulatedDevice extends HayBoxDevice {
   }
 
   getConfig(): Promise<Config | null | undefined> {
-    const storedConfig = localStorage.getItem('config');
+    const storedConfig = localStorage.getItem(EMULATED_CONFIG_KEY);
     if (!storedConfig) return Promise.resolve(new Config(defaultConfig));
     return Promise.resolve(Config.fromJsonString(storedConfig));
   }
 
   setConfig(config: Config): Promise<boolean> {
     console.debug('[EmulatedDevice] Setting config:', config);
-    localStorage.setItem('config', config.toJsonString());
+    localStorage.setItem(EMULATED_CONFIG_KEY, config.toJsonString());
 
     return Promise.resolve(true);
   }

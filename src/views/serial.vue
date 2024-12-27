@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { CheckIcon, CoggerIcon, USBIcon } from '@/components/icons';
 import { useDeviceManager } from '@/stores/deviceManager';
-import { Copy } from 'lucide-vue-next';
 import { nextTick, reactive, ref } from 'vue';
 
 const BUFFER_SIZE = 256;

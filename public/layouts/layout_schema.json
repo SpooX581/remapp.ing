@@ -14,6 +14,22 @@
       "description": "Regex pattern to match against deviceName",
       "type": "string"
     },
+    "viewport": {
+      "description": "Viewport size",
+      "type": "array",
+      "items": [
+        {
+          "description": "Width",
+          "type": "number"
+        },
+        {
+          "description": "Height",
+          "type": "number"
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
     "buttons": {
       "description": "Physical button layout",
       "type": "array",
@@ -48,8 +64,13 @@
             "type": "array",
             "items": {
               "type": "array",
-              "prefixItems": [{ "$ref": "#/$defs/button" }, { "$ref": "#/$defs/binding" }],
+              "prefixItems": [
+                { "$ref": "#/$defs/button" },
+                { "$ref": "#/$defs/binding" },
+                { "$ref": "#/$defs/bindingVisibility" }
+              ],
               "minItems": 2,
+              "maxItems": 3,
               "items": false
             }
           },
@@ -86,7 +107,11 @@
     },
     "mode": {
       "description": "Mode ID",
-      "enum": ["melee", "project_m", "ultimate", "fgc", "rivals_of_aether", "keyboard", "custom"]
+      "enum": ["melee", "project_m", "ultimate", "fgc", "rivals_of_aether", "rivals_of_aether_2", "keyboard", "custom"]
+    },
+    "bindingVisibility": {
+      "description": "Binding visibility",
+      "enum": ["hidden"]
     },
     "binding": {
       "description": "Binding ID",
@@ -121,6 +146,8 @@
         "right_stick_down",
         "right_stick_left",
         "right_stick_right",
+        "light_shield",
+        "medium_shield",
         "kb_a",
         "kb_b",
         "kb_c",

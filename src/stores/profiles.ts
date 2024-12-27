@@ -6,7 +6,7 @@ import { type GameMode, gameModeToStringId } from '@/lib/modes';
 import { SOCD_TYPE, type SocdPair, type SocdType } from '@/lib/socd';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { acceptHMRUpdate, defineStore } from 'pinia';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 export type ButtonState = {
   /* currently hovered */
@@ -37,6 +37,11 @@ export type SocdPairData = {
   i: number;
 } & SocdPair;
 
+export type VirtualButton = {
+  physical: PhysicalButton;
+  binding: Binding;
+};
+
 function mapButton(mode: GameMode, layout: Layout, i: number): ButtonData & ButtonState {
   const [button, x, y] = layout.buttons[i];
   const binding = layout.modes[mode]?.bindings.find(([physical]) => physical === button)?.[1] || BINDING.UNSPECIFIED;
@@ -63,42 +68,37 @@ function initButtons(layout: Layout, mode: GameMode): (ButtonData & ButtonState)
   return new Array(layout.buttons.length).fill(0).map((_, i) => mapButton(mode, layout, i));
 }
 
+function initVirtualButtons(layout: Layout, mode: GameMode): VirtualButton[] {
+  return (
+    layout.modes[mode]?.bindings
+      .filter(([, , visibility]) => visibility === 'hidden')
+      .map(([physical, binding]) => ({ physical, binding })) || []
+  );
+}
+
 export function useProfile(mode: GameMode, layout: Layout) {
-  const create = defineStore(`profile_${gameModeToStringId(mode)}_${layout.id}`, () => {
+  const create = defineStore(`profile_${layout.id}_${gameModeToStringId(mode)}`, () => {
+    const viewportSize = ref<[number, number]>([...layout.viewport]);
+
     const buttons = ref<(ButtonState & ButtonData)[]>([]);
+    const virtualButtons = ref<VirtualButton[]>([]);
 
     const socd = ref<SocdPairData[]>([]);
 
     const selected = ref<number | null>(null);
+    const hovered = ref<number | null>(null);
 
-    function toggleSelected(i: number) {
-      buttons.value[i] = {
-        ...buttons.value[i],
-        isSelected: !buttons.value[i].isSelected,
-      };
+    watch(selected, (newSelected, oldSelected) => {
+      if (newSelected === oldSelected) return;
+      if (oldSelected !== null) buttons.value[oldSelected].isSelected = false;
+      if (newSelected !== null) buttons.value[newSelected].isSelected = true;
+    });
 
-      for (let j = 0; j < buttons.value.length; j++) {
-        if (j !== i) {
-          if (buttons.value[j].isSelected) {
-            buttons.value[j] = { ...buttons.value[j], isSelected: false };
-          }
-        }
-      }
-
-      selected.value = buttons.value[i].isSelected ? i : null;
-    }
-
-    function clearSelected() {
-      if (selected.value === null) return;
-      buttons.value = buttons.value.map((s) => ({ ...s, isSelected: false }));
-      selected.value = null;
-    }
-
-    function setHover(i: number, hover: boolean) {
-      if (i < 0 || i >= buttons.value.length) return;
-      if (buttons.value[i].isHover === hover) return;
-      buttons.value[i] = { ...buttons.value[i], isHover: hover };
-    }
+    watch(hovered, (newHovered, oldHovered) => {
+      if (newHovered === oldHovered) return;
+      if (oldHovered !== null) buttons.value[oldHovered].isHover = false;
+      if (newHovered !== null) buttons.value[newHovered].isHover = true;
+    });
 
     function setBinding(binding: Binding) {
       if (selected.value === null) return;
@@ -153,7 +153,7 @@ export function useProfile(mode: GameMode, layout: Layout) {
 
         a: BINDING.UNSPECIFIED,
         b: BINDING.UNSPECIFIED,
-        type: SOCD_TYPE.SECOND_INPUT_NO_REACTIVATION,
+        type: SOCD_TYPE.NEUTRAL,
       });
     }
 
@@ -174,6 +174,7 @@ export function useProfile(mode: GameMode, layout: Layout) {
 
     function loadFromConfig(config: Config) {
       buttons.value = initButtons(layout, mode);
+      virtualButtons.value = initVirtualButtons(layout, mode);
 
       const modeConfig = config.gameModes.find((c) => c.id === mode);
       if (!modeConfig) return;
@@ -235,11 +236,13 @@ export function useProfile(mode: GameMode, layout: Layout) {
     }
 
     return {
+      viewportSize,
+
       buttons,
+      virtualButtons,
       socd,
-      toggleSelected,
-      clearSelected,
-      setHover,
+      hovered,
+      selected,
 
       setBinding,
       setSocdBinding,

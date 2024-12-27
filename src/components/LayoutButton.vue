@@ -1,25 +1,17 @@
 <script setup lang="ts">
 import ButtonContent from '@/components/ButtonContent.vue';
+import { useDevBar } from '@/composables/devBar';
+import { displayPhysicalButton } from '@/lib/physicalDisplay';
+import { BUTTON_HEIGHT, BUTTON_WIDTH, SCALE_FACTOR } from '@/lib/utils';
+import { useEditor } from '@/stores/editor';
 import type { ButtonData, ButtonState } from '@/stores/profiles';
-import { computed, onBeforeUnmount, onMounted, useTemplateRef } from 'vue';
-
-const rect = useTemplateRef('rect');
+import { computed, useTemplateRef } from 'vue';
 
 const props = defineProps<{
-  elRef: (i: number, el: HTMLElement) => void;
-  elUnref: (i: number) => void;
-
   showSocd: boolean;
   data: ButtonData & ButtonState;
+  inEditor?: boolean;
 }>();
-
-onMounted(() => {
-  props.elRef(props.data.i, rect.value as never as HTMLElement);
-});
-
-onBeforeUnmount(() => {
-  props.elUnref(props.data.i);
-});
 
 const state = computed(() => {
   if (props.data.isSelected) {
@@ -37,20 +29,26 @@ const state = computed(() => {
   return 'none';
 });
 
-const x = computed(() => props.data.x * 10);
-const y = computed(() => props.data.y * 10);
+const x = computed(() => props.data.x * SCALE_FACTOR);
+const y = computed(() => props.data.y * SCALE_FACTOR);
 
-const width = 88;
-const height = 88;
+const width = BUTTON_WIDTH;
+const height = BUTTON_HEIGHT;
+
+const devBar = useDevBar();
+const editor = useEditor();
+
+const rect = useTemplateRef('rect');
+
+defineExpose({ rect, i: props.data.i });
 </script>
 
 <template>
-  <svg ref="g" :x="x" :y="y">
+  <svg :x="x" :y="y" :width :height>
     <rect ref="rect" :width :height :data-state="state" :data-hover="data.isHover" />
 
-    <foreignObject :width :height>
+    <foreignObject class="layout-button" :width :height>
       <div
-        class="layout-button"
         :data-state="state"
         :data-hover="data.isHover"
         :class="{ socd: data.socd !== undefined && showSocd }"
@@ -58,6 +56,9 @@ const height = 88;
       >
         <ButtonContent :binding="data.binding" />
       </div>
+      <code v-if="devBar && inEditor">
+        {{ data.physical === 'unspecified' ? 'unsp' : displayPhysicalButton(data.physical, editor.naming) }}
+      </code>
     </foreignObject>
   </svg>
 </template>
@@ -77,8 +78,8 @@ const height = 88;
   --button-modified: lch(40 35 153);
 }
 
-.layout svg rect,
-.layout-button {
+.layout svg > svg > rect,
+.layout-button > div {
   transition-duration: 150ms;
   transition-timing-function: ease-in-out;
 
@@ -93,7 +94,7 @@ const height = 88;
   }
 }
 
-.layout svg {
+.layout svg > svg {
   user-select: none;
 
   rect {
@@ -122,11 +123,11 @@ const height = 88;
   }
 }
 
-.light .layout-button {
+.light .layout-button > div {
   border-width: 3px;
 }
 
-.layout-button {
+.layout-button > div {
   @apply flex items-center justify-center w-full h-full;
 
   transition-property: border-radius, border-color;
@@ -146,5 +147,9 @@ const height = 88;
   svg {
     @apply w-6 h-6;
   }
+}
+
+.layout-button > code {
+  @apply absolute top-0 text-xs;
 }
 </style>
