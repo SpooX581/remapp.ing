@@ -11,7 +11,7 @@ import { useActiveElement, useMagicKeys } from '@vueuse/core';
 import fuzzysort from 'fuzzysort';
 import { PopoverAnchor } from 'radix-vue';
 import { type Component, ref, watch } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 
 const activeElement = useActiveElement();
 
@@ -65,6 +65,7 @@ function toggleDevBar() {
 const deviceManager = useDeviceManager();
 
 const route = useRoute();
+const router = useRouter();
 
 const { toast } = useToast();
 
