@@ -1,6 +1,13 @@
 import { BINDING, type Binding } from '@/lib/bindings';
 import { PHYSICAL_BUTTON, type PhysicalButton, allPhysicalButtons } from '@/lib/buttons';
-import type { Layout, LayoutExport, ModeConfig } from '@/lib/layout';
+import {
+  type Layout,
+  type LayoutExport,
+  type ModeConfig,
+  type ModeConfigExport,
+  exportModeConfig,
+  exportPhysical,
+} from '@/lib/layout';
 import { GAME_MODE, type GameMode, allModes, gameModeToName } from '@/lib/modes';
 import { DISPLAY_PHYSICAL_MODE, type DisplayPhysicalMode, displayPhysicalButton } from '@/lib/physicalDisplay';
 import { SOCD_TYPE, SOCD_TYPE_NAME, type SocdPair, allSocdTypes } from '@/lib/socd';
@@ -282,7 +289,9 @@ export const useEditor = defineStore('editor', () => {
       }
     }
 
-    const exportModes = Object.fromEntries([...layoutModes].map(([k, v]) => [k, v]));
+    const exportModes = Object.fromEntries([...layoutModes].map(([k, v]) => [k, exportModeConfig(v)])) as {
+      [key in GameMode]: ModeConfigExport;
+    };
 
     // add virtual buttons
     for (const [mode, bindings] of virtualBindings.value) {
@@ -291,7 +300,11 @@ export const useEditor = defineStore('editor', () => {
           exportModes[mode] = { bindings: [], socd: [] };
         }
 
-        exportModes[mode].bindings.push([button, binding, 'hidden']);
+        if (exportModes[mode].bindings == null) {
+          exportModes[mode].bindings = [];
+        }
+
+        exportModes[mode].bindings?.push([exportPhysical(button), binding, 'hidden']);
       }
     }
 
@@ -301,7 +314,7 @@ export const useEditor = defineStore('editor', () => {
       pattern: devicePattern.value || undefined,
       viewport: viewportSize.value,
       modes: exportModes,
-      buttons: buttons.value.map((button) => [button.physical, button.x, button.y]),
+      buttons: buttons.value.map((button) => [exportPhysical(button.physical), button.x, button.y]),
     };
 
     return layout;

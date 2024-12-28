@@ -1,6 +1,6 @@
 import { useToast } from '@/components/ui/toast';
 import type { Binding } from '@/lib/bindings';
-import type { PhysicalButton } from '@/lib/buttons';
+import { PHYSICAL_BUTTON, type PhysicalButton } from '@/lib/buttons';
 import type { GameMode } from '@/lib/modes';
 import type { SocdType } from '@/lib/socd';
 import { parseRegex, readFile } from '@/lib/utils';
@@ -42,8 +42,41 @@ export type Layout = {
   modes: Partial<{ [key in GameMode]: ModeConfig }>;
 };
 
-export type LayoutExport = Omit<Layout, 'id' | 'path' | 'pattern'> & {
+type Range<N extends number, R extends unknown[] = []> = R['length'] extends N
+  ? R[number]
+  : Range<N, [...R, R['length']]>;
+
+export type PhysicalButtonExport = PhysicalButton | Range<60>;
+
+export function exportPhysical(button: PhysicalButton): PhysicalButtonExport {
+  if (button === PHYSICAL_BUTTON.UNSPECIFIED) {
+    return 'unspecified';
+  }
+
+  return Number(button) as PhysicalButtonExport;
+}
+
+export type ModeConfigExport = {
+  bindings?: ([PhysicalButtonExport, Binding] | [PhysicalButtonExport, Binding, BindingVisibility])[];
+  socd?: [Binding, Binding, SocdType][];
+};
+
+export function exportModeConfig(data: ModeConfig): ModeConfigExport {
+  return {
+    bindings: data.bindings.map(([b, x, v]) => (v ? [exportPhysical(b), x, v] : [exportPhysical(b), x])),
+    socd: data.socd,
+  };
+}
+
+export type LayoutExport = {
+  name: string;
+  viewport: [number, number];
+
+  deviceName?: string;
   pattern?: string;
+
+  buttons: [PhysicalButtonExport, number, number][];
+  modes: Partial<{ [key in GameMode]: ModeConfigExport }>;
 };
 
 export type LayoutIndex = { name: string; path: string };
@@ -89,7 +122,7 @@ async function loadLayout(entry: LayoutIndex): Promise<Layout> {
     name: data.name,
 
     deviceName: data.deviceName,
-    pattern: data.pattern ? (parseRegex(data.pattern) ?? undefined) : undefined,
+    pattern: data.pattern ? parseRegex(data.pattern) ?? undefined : undefined,
 
     viewport: data.viewport,
 
@@ -173,19 +206,28 @@ export function layoutIdFromName(name: string): string {
   );
 }
 
+function modeConfigFromExport(data: ModeConfigExport): ModeConfig {
+  return {
+    bindings: data.bindings?.map(([b, x]) => [b.toString() as PhysicalButton, x]) ?? [],
+    socd: data.socd ?? [],
+  };
+}
+
 export function layoutFromExport(data: LayoutExport): Layout {
   return {
     id: layoutIdFromName(data.name),
     name: data.name,
     deviceName: data.deviceName,
-    viewport: [1000, 600],
-    pattern: data.pattern ? (parseRegex(data.pattern) ?? undefined) : undefined,
-    buttons: data.buttons,
-    modes: data.modes,
+    viewport: data.viewport,
+    pattern: data.pattern ? parseRegex(data.pattern) ?? undefined : undefined,
+    buttons: data.buttons.map(([b, x, y]) => [b.toString() as PhysicalButton, x, y]),
+    modes: Object.fromEntries(Object.entries(data.modes ?? {}).map(([k, v]) => [k, modeConfigFromExport(v)])),
   };
 }
 
 export async function importLayout(file: File) {
+  console.debug('Importing layout:', file);
+
   const { toast } = useToast();
 
   try {
@@ -210,6 +252,8 @@ export async function importLayout(file: File) {
     }
 
     const layout = layoutFromExport(imported);
+
+    layouts.set(layout.id, layout);
 
     return layout;
   } catch (e) {

@@ -1,14 +1,5 @@
 <script setup lang="ts">
-import { useToast } from '@/components/ui/toast';
-import {
-  type Layout,
-  type LayoutExport,
-  getLayouts,
-  importLayout,
-  layoutFromExport,
-  validateLayout,
-} from '@/lib/layout';
-import { readFile } from '@/lib/utils';
+import { type Layout, getLayouts, importLayout } from '@/lib/layout';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { useDropZone, useFileDialog, whenever } from '@vueuse/core';
 import { Upload } from 'lucide-vue-next';
@@ -85,11 +76,8 @@ watch(files, async () => {
         <span>Select your layout:</span>
 
         <div class="flex gap-2 w-full items-center justify-center whitespace-nowrap px-2 py-1 flex-wrap">
-          <div
-            v-for="[key, layout] in allLayouts"
-            class="awa flex flex-col gap-2 rounded-md text-floating bg-floating px-4"
-            :key
-          >
+          <div v-for="[key, layout] in allLayouts"
+            class="awa flex flex-col gap-2 rounded-md text-floating bg-floating px-4" :key>
             <button class="text-lg my-2" @click="deviceManager.overrideLayout(layout)">{{ layout.name }}</button>
           </div>
         </div>
@@ -98,12 +86,9 @@ watch(files, async () => {
       <div ref="drop-zone" class="flex flex-col items-center gap-4 bg-secondary rounded-lg p-4">
         <span>Or import custom:</span>
 
-        <div
-          role="button"
+        <div role="button"
           class="flex items-center justify-center rounded-xl border-2 border-dashed p-4 w-full h-full transition-colors hover:border-accent cursor-pointer"
-          :class="{ 'border-accent': isOverDropZone, 'border-floating': !isOverDropZone }"
-          @click="() => open()"
-        >
+          :class="{ 'border-accent': isOverDropZone, 'border-floating': !isOverDropZone }" @click="() => open()">
           <Upload class="size-24 text-muted" />
         </div>
       </div>
