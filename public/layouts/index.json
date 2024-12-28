@@ -1,6 +1,30 @@
 [
   {
+    "name": "PRI$M",
+    "path": "gramctrl/prism.json"
+  },
+  {
     "name": "GRAM Slim SMASH",
     "path": "gramctrl/slimsmash.json"
+  },
+  {
+    "name": "Granola Plateau",
+    "path": "granola/plateau.json"
+  },
+  {
+    "name": "LBX",
+    "path": "junkfood/lbx.json"
+  },
+  {
+    "name": "Open Frame1",
+    "path": "openframe1/of1.json"
+  },
+  {
+    "name": "Rana Digital",
+    "path": "ranalabs/ranadigital.json"
+  },
+  {
+    "name": "Tadpole",
+    "path": "ranalabs/tadpole.json"
   }
 ]
