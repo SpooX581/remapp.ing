@@ -136,8 +136,8 @@
         [19, "left_trigger"],
         [20, "x"],
         [21, "y"],
-        [22, "left_shoulder"],
-        [23, "right_shoulder"],
+        [22, "right_shoulder"],
+        [23, "left_shoulder"],
         [40, "right_stick_click"],
         [42, "left_stick_click"],
         [43, "left_stick_up"]
