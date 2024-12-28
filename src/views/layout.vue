@@ -48,9 +48,12 @@ const { isOverDropZone } = useDropZone(dropZone, {
   preventDefaultForUnhandled: false,
 });
 
-function onDrop(files: File[] | null) {
+async function onDrop(files: File[] | null) {
   if (files && files.length !== 0) {
-    importLayout(files[0]);
+    const layout = await importLayout(files[0]);
+    if (layout) {
+      deviceManager.overrideLayout(layout);
+    }
   }
 }
 
@@ -61,7 +64,10 @@ const { open, files, reset } = useFileDialog({
 
 watch(files, async () => {
   if (files.value && files.value.length !== 0) {
-    await importLayout(files.value[0]);
+    const layout = await importLayout(files.value[0]);
+    if (layout) {
+      deviceManager.overrideLayout(layout);
+    }
     reset();
   }
 });
