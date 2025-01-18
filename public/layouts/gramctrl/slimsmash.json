@@ -184,7 +184,9 @@
         [43, "right_stick_up"],
         [44, "right_stick_right"],
         [42, "right_stick_left"],
-        [41, "right_stick_down"]
+        [41, "right_stick_down"],
+        [50, "select", "hidden"],
+        [49, "home", "hidden"]
       ],
       "socd": [
         ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
