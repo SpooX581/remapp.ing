@@ -77,7 +77,7 @@ Give these features a try and take your customization to the next level!
 - Make sure that you're holding down the button to enter CONFIG mode when you plug in your controller.
 - Remember that remapp.ing will only work on Chromium based browsers, as other browsers don't support WebSerial.
 
-*Controller manufacturers*: Open a support ticket in the [GRAM Discord](https://www.gramctrl.com/discord) if you have any questions on third-party support.
+*Controller manufacturers*: Take a look at the [CONTRIBUTING.md](https://github.com/GRAMCTRL/remapp.ing/blob/master/CONTRIBUTING.md) to get your controller added, and feel free to open a support ticket in the [GRAM Discord](https://www.gramctrl.com/discord) if you have any questions.
 
 ---
 
