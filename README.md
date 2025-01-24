@@ -1,23 +1,22 @@
-# Remapp.ing Beta
+# remapp.ing
 
-Remapp.ing is the **first and only open-source remapper for platform fighting digital controllers**, designed to be the **universal remapping solution** for all HayBox-based controllers. Whether you're remapping built-in game modes, or tweaking SOCD, Remapp.ing provides a powerful yet intuitive interface for complete controller customization.
+remapp.ing is the **first and only open-source remapper for platform fighting digital controllers**, designed to be the **universal remapping solution** for all HayBox-based controllers. Whether you're remapping built-in game modes, or tweaking SOCD, remapp.ing provides a powerful yet intuitive interface for complete controller customization.
 
 ---
 
 ## Features
 - **First Open-Source HayBox Remapper:** Built to support all HayBox-based controllers and expandable by developers worldwide.
-- **Universal Controller Support:** Easily adapt third-party controllers with our planned layout tools (available in a future beta release).
+- **Universal Controller Support:** Easily adapt third-party controllers with our [visual layout editor](https://remapp.ing/editor).
 - **Built-in Game Modes:** Support for several predefined modes, with ongoing additions for even more games.
 - **SOCD Features:** Change SOCD modes for all defined options, and create new ones on the fly.
-- **Advanced Monitoring Tools:** View and debug controller serial output with ease.
 
 ---
 
 ## Easter Eggs
-Press the `/` key on the Remapp.ing page to unlock hidden tools for advanced users! These include:
-- **Serial Monitor:** A live view of serial communication between your controller and the app for debugging.
-- **Recolor Engine:** Customize the color scheme of the Remapp.ing interface to match your preferences or controller design.
-- **Controller Emulation:** Test your configurations with a built-in controller emulator to ensure everything works as expected before saving changes.
+Press the `/` key on the remapp.ing page to unlock hidden tools for advanced users! These include:
+- **Serial Console:** Interact with your controller over serial for debugging.
+- **Theme Editor:** Customize the color scheme of the remapp.ing interface to match your preferences or controller design.
+- **Controller Emulation:** Use the built-in controller emulator to test your changes when contributing to remapp.ing.
 
 Give these features a try and take your customization to the next level!
 
@@ -27,58 +26,66 @@ Give these features a try and take your customization to the next level!
 
 1. **Download the Firmware Files:**
    - [Nuke.uf2](https://github.com/Gadgetoid/pico-universal-flash-nuke/releases/download/v1.0.1/universal_flash_nuke.uf2)
-   - [GRAMConfig.uf2](https://github.com/GRAMCTRL/HayBox-GRAM/releases/tag/v0.1beta)
+   - [firmware.uf2](https://github.com/GRAMCTRL/HayBox-GRAM/releases/)
+     - Please note that if you are not using a GRAM controller then you'll likely want to look for firmware from your controller manufacturer. Make sure that it uses Haybox 3.0.0+!
 2. **Enter Boot Select Mode:**
-   - Hold the **START** button on your GRAM controller while plugging it into your PC via USB.  
+   - Hold the **A** button on your controller while plugging it into your PC via USB.
+      - If you aren't on a GRAM controller, **START** is a common button to enter BOOTSEL mode. Double check with your controller manufacturer if you have any issues with this.
    - A file explorer window will pop up.
 3. **Flash the Firmware:**
    - Drag and drop `Nuke.uf2` into the file explorer.
    - Wait for the file explorer to close and reopen (this takes about 10 seconds).
-   - Drag and drop `GRAMConfig.uf2` into the file explorer.
+   - Drag and drop `firmware.uf2` into the file explorer.
    - Once it closes again, unplug your controller.
 4. **Reconnect Your Controller:**
-   - Open [Remapp.ing](https://remapp.ing/) in Chrome.
-   - Hold **START** while plugging your controller back in.
-   - Click **CONNECT** and select your controller from the Chrome popup menu.
+   - Open [remapp.ing](https://remapp.ing/) in Chrome.
+   - Hold **START** while plugging your controller back in to enter CONFIG mode.
+      - If you aren't on a GRAM controller, other common buttons to enter CONFIG mode include **C-Down**, **A**, and **C-Right**. Double check with your controller manufacturer if you have any issues with this.
+   - Click **CONNECT** and select your controller from the WebSerial popup menu.
+      - Please note that only Chromium browsers support WebSerial.
+      - If you're on Firefox, there may be WebSerial add-ons that add support, however they may not work with remapp.ing. 
    - Continue to Proceed to remap. Use the interface to:
      - Adjust mappings.
-     - Select different modes (bottom left corner).
-     - Reset your configuration using the **Nuke** button.
-     - Export your configuration by clicking the **Floppy Disc Save** icon.
+     - Select different modes to remap in the bottom left corner.
+     - Reset your current modes remappings using the **Nuke** button.
+     - Save your configuration to your controller by clicking the **Floppy Disc Save** icon.
 
 ---
 
 ## FAQ
 
-### Q: I just loaded the new GRAMConfig.uf2 on my controller. How do I swap back to my previous firmware?
-1. Hold **A** while plugging in your controller.  
-2. Drag and drop `Nuke.uf2` into the file explorer.  
+### Q: I just flashed new firmware on my controller. How do I swap back to my previous firmware?
+1. Hold **A** while plugging in your controller.
+   - If you're using another manufacturers firmware, this button may vary. **START** is a common button to enter BOOTSEL mode. Double check with your controller manufacturer if you have any issues with this.
+2. Drag and drop `Nuke.uf2` into the file explorer.
 3. Drag and drop your previous firmware file into the file explorer.
 
-### Q: What can I expect with the Remapp.ing Beta?
-- As this is a Beta release, you may encounter bugs or limitations.
-- *Note:* **Rivals 2 Mode** is not yet available but will be included in a future beta update.
-
 ### Q: Where do I report bugs or errors?
-- Submit bug reports in our issues panel.
+- Please report bugs using our [Bug Report Issue Template](https://github.com/GRAMCTRL/remapp.ing/issues/new?template=bug_report.md), or in the [GRAMCTRL Discord](https://www.gramctrl.com/discord), under the #ask-for-help > GRAM Remapp.ing forum channel.
 
 ### Q: What browsers are supported?
-- Currently, **Chrome** is the only supported browser.
+- Currently, only Chromium has support for [WebSerial](https://caniuse.com/web-serial).
+- Firefox may work with various WebSerial add-ons, however they may not work with remapp.ing.
 
 ### Q: Is this compatible with all GRAM controllers?
-- Yes, Remapp.ing supports all GRAM Slim SMASH models.  
-- As an open-source project, additional controllers will be supported in future updates.  
-- Third-party developers can add layouts via a simple integration tool.
+- Yes, remapp.ing supports all GRAM Slim models.  
+- As an open-source project, additional controllers will be supported in future updates.
+- Third-party developers can create layouts using the [Visual Editor](https://remapp.ing/editor).
 
-*Controller manufacturers*: Open a support ticket in the [GRAM Discord](https://discord.gg/tSHztv5d) to stay updated on third-party support.
+### Q: It isn't working! What do I do?
+- Verify that you're using Haybox 3.0.0+, as previous versions don't support CONFIG mode.
+- Make sure that you're holding down the button to enter CONFIG mode when you plug in your controller.
+- Remember that remapp.ing will only work on Chromium based browsers, as other browsers don't support WebSerial.
+
+*Controller manufacturers*: Open a support ticket in the [GRAM Discord](https://www.gramctrl.com/discord) if you have any questions on third-party support.
 
 ---
 
 ## Acknowledgements
 - Huge thanks to [**Haystack**](https://github.com/JonnyHaystack) for developing the HayBox firmware and serial protocol, without which this project wouldn't be possible.  
-- A special shoutout to [**@bvoo**](https://github.com/bvoo) for the amazing work on Remapp.ing. More exciting features are on the way! 🎉
+- A special shoutout to [**@bvoo**](https://github.com/bvoo) for the amazing work on remapp.ing. More exciting features are on the way! 🎉
 
 ---
 
 ## Feedback
-Tried Remapp.ing Beta? Let us know your thoughts and give this project a ⭐ on GitHub! 🚀
+Tried remapp.ing? Let us know your thoughts and give this project a ⭐ on GitHub! 🚀
