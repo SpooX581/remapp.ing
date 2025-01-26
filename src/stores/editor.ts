@@ -466,6 +466,7 @@ export const useEditor = defineStore('editor', () => {
   };
 });
 
+// https://pinia.vuejs.org/cookbook/hot-module-replacement.html
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useEditor, import.meta.hot));
 }

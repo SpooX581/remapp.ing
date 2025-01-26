@@ -34,8 +34,8 @@ function onViewportResize(w?: string | number, h?: string | number) {
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 mt-2">
-    <Label class="text-secondary font-semibold uppercase">Viewport Size</Label>
+  <div class="mt-2 flex flex-col gap-2">
+    <Label class="font-semibold uppercase text-secondary">Viewport Size</Label>
     <div class="flex gap-2">
       <DragNumberInput
         label="W"
@@ -60,23 +60,23 @@ function onViewportResize(w?: string | number, h?: string | number) {
     </div>
   </div>
 
-  <div class="flex flex-col gap-2 mt-2">
-    <Label class="text-secondary font-semibold uppercase">Layout Name</Label>
+  <div class="mt-2 flex flex-col gap-2">
+    <Label class="font-semibold uppercase text-secondary">Layout Name</Label>
     <Input v-model="editor.layoutName" type="text" placeholder="GRAM Slim SMASH" />
   </div>
 
-  <div class="flex flex-col gap-2 mt-2">
-    <Label class="text-secondary font-semibold uppercase">Device Name</Label>
+  <div class="mt-2 flex flex-col gap-2">
+    <Label class="font-semibold uppercase text-secondary">Device Name</Label>
     <Input v-model="editor.deviceName" type="text" placeholder="GRAM Slim SMASH" />
   </div>
 
-  <div class="flex flex-col gap-2 mt-2">
-    <Label class="text-secondary font-semibold uppercase">Device Pattern</Label>
+  <div class="mt-2 flex flex-col gap-2">
+    <Label class="font-semibold uppercase text-secondary">Device Pattern</Label>
     <Input v-model="editor.devicePattern" type="text" placeholder="GRAM Slim SMASH" />
   </div>
 
   <div class="flex flex-col gap-2">
-    <Label class="text-secondary font-semibold uppercase">Button naming convention</Label>
+    <Label class="font-semibold uppercase text-secondary">Button naming convention</Label>
     <Combobox :options="namingOptions" v-model="editor.naming" close-on-select>
       <template #preview="{ value }">
         <span v-if="value">{{ DISPLAY_PHYSICAL_MODE_NAME[value] }}</span>
@@ -89,7 +89,7 @@ function onViewportResize(w?: string | number, h?: string | number) {
   </div>
 
   <div class="flex flex-col gap-2">
-    <Label class="text-secondary font-semibold uppercase">Buttons</Label>
+    <Label class="font-semibold uppercase text-secondary">Buttons</Label>
     <TagSelect :options="buttonOptions" v-model="editor.physicalButtons" :sort-fn="physicalButtonsSortFn">
       <template #tag="{ value }">{{ displayPhysicalButton(value, editor.naming) }}</template>
 
@@ -100,7 +100,7 @@ function onViewportResize(w?: string | number, h?: string | number) {
   </div>
 
   <div class="flex flex-col gap-2">
-    <Label class="text-secondary font-semibold uppercase">Modes</Label>
+    <Label class="font-semibold uppercase text-secondary">Modes</Label>
     <TagSelect :options="editor.modeOptions" v-model="editor.modes">
       <template #tag="{ value }">{{ gameModeToName(value) }}</template>
       <template #item="{ html }"><span v-html="html" /></template>

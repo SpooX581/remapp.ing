@@ -33,8 +33,17 @@ const deviceManager = useDeviceManager();
 const router = useRouter();
 const devBar = useDevBar();
 
+let noLayout = false;
+
 function noLayoutFound() {
+  noLayout = true;
   router.push('/layout');
+}
+
+function connected() {
+  if (!noLayout) {
+    router.push('/mapping');
+  }
 }
 
 function disconnected() {
@@ -47,6 +56,7 @@ function disconnected() {
 
 deviceManager.onNoLayoutFound(noLayoutFound);
 deviceManager.onDisconnected(disconnected);
+deviceManager.onConnected(connected);
 
 watch(route, onRouteSwitch, { immediate: true });
 </script>
@@ -56,8 +66,8 @@ watch(route, onRouteSwitch, { immediate: true });
   <TooltipProvider :delay-duration="300">
     <Devbar />
 
-    <div class="header flex flex-col mb-20" :class="[headerPosition, headerPosition !== 'corner' && 'items-center']">
-      <h1 class="font-light tracking-giga leading-tight">REMAPP.ING</h1>
+    <div class="header mb-20 flex flex-col" :class="[headerPosition, headerPosition !== 'corner' && 'items-center']">
+      <h1 class="tracking-giga font-light leading-tight">REMAPP.ING</h1>
 
       <div v-if="headerPosition === 'corner'" class="pl-2 text-base">
         <h3>Designed by:</h3>
@@ -83,8 +93,8 @@ watch(route, onRouteSwitch, { immediate: true });
       </Tooltip> -->
       <Tooltip>
         <TooltipTrigger as-child>
-          <a class="btn icon w-16 h-16" :href="GITHUB">
-            <GithubIcon class="w-10 h-10" />
+          <a class="btn icon h-16 w-16" :href="GITHUB">
+            <GithubIcon class="h-10 w-10" />
           </a>
         </TooltipTrigger>
         <TooltipContent side="right" :collision-padding="8">
@@ -99,7 +109,7 @@ watch(route, onRouteSwitch, { immediate: true });
 
 <style>
 .header {
-  @apply absolute -translate-x-1/2 left-1/2;
+  @apply absolute left-1/2 -translate-x-1/2;
 
   transition-property: top, left, transform, font-size;
   transition-duration: 300ms;
@@ -117,7 +127,7 @@ watch(route, onRouteSwitch, { immediate: true });
   }
 
   &.corner {
-    @apply top-0 left-0 transform-none pt-4 pl-4;
+    @apply left-0 top-0 transform-none pl-4 pt-4;
 
     h1 {
       font-size: 64px;
@@ -126,7 +136,7 @@ watch(route, onRouteSwitch, { immediate: true });
 }
 
 .corner-thing {
-  @apply absolute bottom-0 top-0 left-0 flex flex-col gap-4 pl-4 pb-4;
+  @apply absolute bottom-0 left-0 top-0 flex flex-col gap-4 pb-4 pl-4;
 
   > .spacer {
     height: 100%;

@@ -42,7 +42,7 @@ const options = computed<Option[]>(() =>
 type Result = Fuzzysort.KeysResult<Option>;
 
 // typescript doesnt like this type for some reason
-const results: Ref<Result[]> = ref(options.value.map((option) => ({ obj: option } as never)));
+const results: Ref<Result[]> = ref(options.value.map((option) => ({ obj: option }) as never));
 
 function filterFunction(_: TValue[], query: string): TValue[] {
   const sortResults = fuzzysort.go(query, options.value, {
@@ -106,7 +106,7 @@ const displayedModelValue = computed(() => {
 
 <template>
   <TagsInput :model-value="internalModelValue" :data-empty="displayedModelValue.length === 0">
-    <div class="flex gap-2 flex-wrap items-center px-3">
+    <div class="flex flex-wrap items-center gap-2 px-3">
       <TagsInputItem v-for="value in displayedModelValue" :key="value" :value>
         <TagsInputItemText>
           <slot name="tag" :value />
@@ -120,7 +120,7 @@ const displayedModelValue = computed(() => {
       v-model:open="open"
       v-model:search-term="searchTerm"
       class="w-full"
-      :filter-function="(filterFunction as never)"
+      :filter-function="filterFunction as never"
     >
       <ComboboxAnchor as-child>
         <ComboboxInput placeholder="Search" as-child>
@@ -162,12 +162,12 @@ const displayedModelValue = computed(() => {
 
 <style>
 .tag-select-list {
-  @apply w-[--radix-popper-anchor-width] rounded-md mt-2 border border-floating bg-floating text-floating shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
+  @apply mt-2 w-[--radix-popper-anchor-width] rounded-md border border-floating bg-floating text-floating shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2;
 }
 
 .tag-select-item-content,
 .tag-select-item-preview {
-  @apply flex items-center w-full h-6 gap-2 justify-between;
+  @apply flex h-6 w-full items-center justify-between gap-2;
 
   span {
     @apply text-lg font-semibold;
@@ -178,7 +178,7 @@ const displayedModelValue = computed(() => {
   }
 
   .id {
-    @apply text-secondary text-sm;
+    @apply text-sm text-secondary;
   }
 
   svg {

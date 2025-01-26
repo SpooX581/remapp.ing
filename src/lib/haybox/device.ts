@@ -10,6 +10,12 @@ import type { GameMode } from '@/lib/modes';
 import type { SocdPair } from '@/lib/socd';
 import * as hb from 'haybox-webserial';
 
+export class SerialNotSupportedError extends Error {
+  constructor() {
+    super('Web Serial API not supported.');
+  }
+}
+
 export class SerialDeviceManager extends ConnectionManager {
   protected port: SerialPort | null = null;
 
@@ -22,32 +28,31 @@ export class SerialDeviceManager extends ConnectionManager {
   /* only kept to not lose settings that arent included in the internal config */
   private config: hb.Config | null = null;
 
-  public async connect(stateCb: (state: ConnectionState) => void): Promise<boolean> {
-    if ('serial' in navigator) {
-      stateCb('connecting');
-
-      try {
-        const newPort = await navigator.serial.requestPort();
-
-        console.debug('[serial::connect] new port', newPort);
-
-        stateCb('connected');
-
-        this.port = newPort;
-        this.device = new hb.HayBoxDevice(this.port);
-
-        return true;
-      } catch (err) {
-        console.error('There was an error opening the serial port:', err);
-        stateCb('disconnected');
-      }
-    } else {
-      console.error('Web Serial API not supported.');
-    }
-
+  public async connect(stateCb: (state: ConnectionState) => void): Promise<void> {
+    stateCb('disconnected');
+    this.port = null;
     this.device = null;
 
-    return false;
+    if (!('serial' in navigator)) {
+      this.device = null;
+      throw new SerialNotSupportedError();
+    }
+
+    stateCb('connecting');
+
+    try {
+      const newPort = await navigator.serial.requestPort();
+
+      console.debug('[serial::connect] new port', newPort);
+
+      stateCb('connected');
+
+      this.port = newPort;
+      this.device = new hb.HayBoxDevice(this.port);
+    } catch (err) {
+      stateCb('disconnected');
+      throw err;
+    }
   }
 
   public async disconnect() {
@@ -66,15 +71,20 @@ export class SerialDeviceManager extends ConnectionManager {
   public async getDeviceInfo(): Promise<DeviceInfo | null> {
     if (!this.device) return null;
 
-    const info = await this.device.getDeviceInfo();
+    try {
+      const info = await this.device.getDeviceInfo();
 
-    if (!info) return null;
+      if (!info) return null;
 
-    return {
-      deviceName: info.deviceName,
-      firmwareName: info.firmwareName,
-      firmwareVersion: info.firmwareVersion,
-    };
+      return {
+        deviceName: info.deviceName,
+        firmwareName: info.firmwareName,
+        firmwareVersion: info.firmwareVersion,
+      };
+    } catch (err) {
+      console.error('Error getting device info:', err);
+      return null;
+    }
   }
 
   public async getConfig(layout: Layout): Promise<Config | null> {
@@ -102,7 +112,7 @@ export class SerialDeviceManager extends ConnectionManager {
   public async setConfig(layout: Layout, config: Config): Promise<boolean> {
     if (!this.device || !this.config) return false;
 
-    this.config.gameModeConfigs = config.gameModes.map((mode) => internalGameModeToHaybox(layout, mode));
+    this.config.gameModeConfigs = config.gameModes.map((mode) => internalGameModeToHaybox(this.config, layout, mode));
 
     return await this.device.setConfig(this.config);
   }
@@ -134,13 +144,17 @@ function hayboxToInternalGameMode(layout: Layout, config: hb.GameModeConfig): Ga
   };
 }
 
-function internalGameModeToHaybox(layout: Layout, mode: GameModeConfig): hb.GameModeConfig {
+function internalGameModeToHaybox(config: hb.Config | null, layout: Layout, mode: GameModeConfig): hb.GameModeConfig {
+  const previous = config?.gameModeConfigs.find((c) => c.modeId === MODE_TO_HAYBOX[mode.id]) ?? new hb.GameModeConfig();
   return new hb.GameModeConfig({
     modeId: MODE_TO_HAYBOX[mode.id],
     name: mode.name,
     socdPairs: mode.socdPairs.map((pair) => internalToHayboxSocd(layout, mode.id, pair)),
     activationBinding: mode.activationBinding.map((b) => BUTTON_TO_HAYBOX[b]),
     buttonRemapping: mode.buttonRemapping.map((b) => internalToHayboxButtonBinding(layout, mode.id, b)),
+    customModeConfig: previous.customModeConfig,
+    keyboardModeConfig: previous.keyboardModeConfig,
+    rgbConfig: previous.rgbConfig,
   });
 }
 
@@ -160,9 +174,9 @@ function internalToHayboxButtonBinding(layout: Layout, mode: GameMode, binding: 
 }
 
 export class EmulatedSerialDeviceManager extends SerialDeviceManager {
-  public connect(stateCb: (state: ConnectionState) => void): Promise<boolean> {
+  public connect(stateCb: (state: ConnectionState) => void): Promise<void> {
     this.device = new EmulatedDevice();
     stateCb('connected');
-    return Promise.resolve(true);
+    return Promise.resolve();
   }
 }

@@ -22,7 +22,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     v-bind="forwarded"
     :class="
       cn(
-        'peer size-5 shrink-0 rounded-md text-floating border border-floating focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 bg-floating data-[state=checked]:bg-floating-active',
+        'peer size-5 shrink-0 rounded-md border border-floating bg-floating text-floating focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-floating-active',
         props.class,
       )
     "

@@ -88,22 +88,29 @@ export function useProfile(mode: GameMode, layout: Layout) {
     const selected = ref<number | null>(null);
     const hovered = ref<number | null>(null);
 
-    watch(selected, (newSelected, oldSelected) => {
-      if (newSelected === oldSelected) return;
-      if (oldSelected !== null) buttons.value[oldSelected].isSelected = false;
-      if (newSelected !== null) buttons.value[newSelected].isSelected = true;
+    function setHovered(i: number | null) {
+      hovered.value = i;
+    }
+
+    watch(selected, (value, old) => {
+      if (value === old) return;
+      if (old != null) buttons.value[old].isSelected = false;
+      if (value != null) buttons.value[value].isSelected = true;
     });
 
-    watch(hovered, (newHovered, oldHovered) => {
-      if (newHovered === oldHovered) return;
-      if (oldHovered !== null) buttons.value[oldHovered].isHover = false;
-      if (newHovered !== null) buttons.value[newHovered].isHover = true;
+    watch(hovered, (value, old) => {
+      if (value === old) return;
+      if (old != null) buttons.value[old].isHover = false;
+      if (value != null) buttons.value[value].isHover = true;
     });
 
-    function setBinding(binding: Binding) {
-      if (selected.value === null) return;
+    const setSelectedBinding = (binding: Binding) => setBinding(selected.value, binding);
+    const setHoveredBinding = (binding: Binding) => setBinding(hovered.value, binding);
 
-      const k = buttons.value[selected.value];
+    function setBinding(i: number | null, binding: Binding) {
+      if (i == null || i < 0 || i >= buttons.value.length) return;
+
+      const k = buttons.value[i];
 
       k.binding = binding;
       k.isDirty = k.initialBinding !== binding;
@@ -241,10 +248,12 @@ export function useProfile(mode: GameMode, layout: Layout) {
       buttons,
       virtualButtons,
       socd,
-      hovered,
       selected,
+      hovered,
+      setHovered,
 
-      setBinding,
+      setSelectedBinding,
+      setHoveredBinding,
       setSocdBinding,
       setSocdBindingType,
       addSocd,
@@ -254,6 +263,7 @@ export function useProfile(mode: GameMode, layout: Layout) {
     };
   });
 
+  // https://pinia.vuejs.org/cookbook/hot-module-replacement.html
   if (import.meta.hot) {
     import.meta.hot.accept(acceptHMRUpdate(create, import.meta.hot));
   }

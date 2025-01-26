@@ -119,7 +119,7 @@ watch(open, () => nextTick(() => nextTick(() => nextTick(() => (searchTerm.value
       <Command
         :class="direction === 'top' ? 'flex-col-reverse' : 'flex-col'"
         v-model="modelValue"
-        :filter-function="(filterFunction as never)"
+        :filter-function="filterFunction as never"
         v-model:selected-value="selected"
         :reset-search-term-on-blur="false"
         v-model:search-term="searchTerm"
@@ -156,15 +156,15 @@ watch(open, () => nextTick(() => nextTick(() => nextTick(() => (searchTerm.value
 <style>
 .combobox-item-preview,
 .combobox-item-preview span {
-  @apply text-ellipsis overflow-hidden;
+  @apply overflow-hidden text-ellipsis;
 }
 
 .combobox-item-content,
 .combobox-item-preview {
-  @apply flex items-center w-full h-6 gap-2 justify-between;
+  @apply flex h-6 w-full items-center justify-between gap-2;
 
   span {
-    @apply text-base font-semibold whitespace-nowrap;
+    @apply whitespace-nowrap text-base font-semibold;
 
     strong {
       @apply font-bold text-primary;
@@ -172,7 +172,7 @@ watch(open, () => nextTick(() => nextTick(() => nextTick(() => (searchTerm.value
   }
 
   .id {
-    @apply text-secondary text-sm;
+    @apply text-sm text-secondary;
   }
 
   svg {

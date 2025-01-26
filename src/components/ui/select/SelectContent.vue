@@ -34,7 +34,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     <SelectContent
       v-bind="{ ...forwarded, ...$attrs }"
       class="select-content"
-      :class="cn('rounded-lg border shadow-lg bg-floating text-floating border-floating', position, props.class)"
+      :class="cn('rounded-lg border border-floating bg-floating text-floating shadow-lg', position, props.class)"
     >
       <SelectScrollUpButton />
       <SelectViewport :class="cn('p-1', position)">

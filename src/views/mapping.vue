@@ -31,11 +31,15 @@ function clearSelected() {
   if (profile.value) profile.value.selected = null;
 }
 
-function setBinding(binding: Binding) {
-  profile.value?.setBinding(binding);
+function onBindingSelect(binding: Binding) {
+  profile.value?.setSelectedBinding(binding);
 
   // todo: should the button be unselected
   clearSelected();
+}
+
+function onBindingDrop(binding: Binding) {
+  profile.value?.setHoveredBinding(binding);
 }
 
 function setSocdBinding(i: number, side: 'a' | 'b') {
@@ -58,6 +62,7 @@ const tab = ref<Tab>('bindings');
         :buttons="profile.buttons"
         :selected="profile.selected"
         @update:selected="onClick"
+        @hover="profile.setHovered"
         :viewport-size="profile.viewportSize"
       />
     </template>
@@ -69,7 +74,7 @@ const tab = ref<Tab>('bindings');
       </TabsList>
 
       <TabsContent value="bindings" class="panel scroller">
-        <BindingsPanel @select="setBinding" />
+        <BindingsPanel @select="onBindingSelect" @drop="onBindingDrop" :button-selected="profile?.selected != null" />
       </TabsContent>
 
       <TabsContent value="socd" class="panel scroller">
@@ -85,7 +90,7 @@ const tab = ref<Tab>('bindings');
     </Tabs>
 
     <footer class="flex">
-      <div class="flex gap-8 items-center">
+      <div class="flex items-center gap-8">
         <ProfileSelect />
 
         <div>
@@ -94,14 +99,14 @@ const tab = ref<Tab>('bindings');
         </div>
       </div>
 
-      <div class="flex gap-2 items-center">
+      <div class="flex items-center gap-2">
         <Tooltip>
           <TooltipTrigger as-child>
             <button class="btn icon h-16 w-16" @click="profile?.clearMappings()">
-              <BombIcon class="w-8 h-8" />
+              <BombIcon class="h-8 w-8" />
             </button>
           </TooltipTrigger>
-          <TooltipContent side="top" class="text-center max-w-64" :collision-padding="8">
+          <TooltipContent side="top" class="max-w-64 text-center" :collision-padding="8">
             <p>Nuclear Bomb</p>
             <p class="text-tertiary">Clear device remappings from active profile</p>
           </TooltipContent>
@@ -109,7 +114,7 @@ const tab = ref<Tab>('bindings');
         <Tooltip>
           <TooltipTrigger as-child>
             <button class="btn icon h-16 w-16" @click="deviceManager.saveConfig()">
-              <SaveIcon class="w-8 h-8" />
+              <SaveIcon class="h-8 w-8" />
             </button>
           </TooltipTrigger>
           <TooltipContent side="top" :collision-padding="8">
@@ -123,7 +128,7 @@ const tab = ref<Tab>('bindings');
 
 <style>
 .mapping {
-  @apply grid gap-4 p-4 w-full h-screen overflow-hidden;
+  @apply grid h-screen w-full gap-4 overflow-hidden p-4;
 
   grid-template-columns: 4rem 1fr 320px;
   grid-template-rows: 8rem minmax(0, 1fr) 88px;
@@ -159,7 +164,7 @@ const tab = ref<Tab>('bindings');
     }
 
     > div {
-      @apply relative flex flex-col p-4 bg-secondary text-secondary rounded-lg;
+      @apply relative flex flex-col rounded-lg bg-secondary p-4 text-secondary;
 
       overflow-x: hidden;
       overflow-y: auto;

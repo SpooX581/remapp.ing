@@ -35,7 +35,7 @@ const forwardedProps = useForwardProps(delegatedProps);
 
 <style>
 .select-item {
-  @apply relative flex w-full select-none items-center outline-none cursor-pointer;
+  @apply relative flex w-full cursor-pointer select-none items-center outline-none;
 
   > span:first-child {
     @apply absolute left-2 flex h-3.5 w-3.5 items-center justify-center;
@@ -51,6 +51,6 @@ const forwardedProps = useForwardProps(delegatedProps);
 }
 
 .select-item[data-disabled] {
-  @apply opacity-50 pointer-events-none cursor-default;
+  @apply pointer-events-none cursor-default opacity-50;
 }
 </style>

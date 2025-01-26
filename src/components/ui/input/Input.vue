@@ -42,7 +42,7 @@ const fastStep = computed(() => props.fastStep ?? step.value);
     :step="(props.step || props.fastStep) && (shift ? fastStep : step)"
     :class="
       cn(
-        'input flex h-8 w-full px-3 py-2 text-sm rounded-md bg-floating hover:bg-floating-hover transition-colors text-floating border border-floating file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:cursor-not-allowed disabled:opacity-50',
+        'input flex h-8 w-full rounded-md border border-floating bg-floating px-3 py-2 text-sm text-floating transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium hover:bg-floating-hover disabled:cursor-not-allowed disabled:opacity-50',
         props.class,
       )
     "

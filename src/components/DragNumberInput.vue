@@ -72,8 +72,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="flex items-center w-full">
-    <Label ref="label" class="select-none cursor-e-resize px-2 py-2">{{ props.label }}</Label>
+  <div class="flex w-full items-center">
+    <Label ref="label" class="cursor-e-resize select-none px-2 py-2">{{ props.label }}</Label>
     <Input v-bind="$attrs" type="number" v-model="modelValue" :step />
   </div>
 </template>

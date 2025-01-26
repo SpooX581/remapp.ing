@@ -1,11 +1,16 @@
 <script setup lang="ts">
-import { type Binding, BINDING as B } from '@/lib/bindings';
 import ButtonContent from '@/components/ButtonContent.vue';
 import useActiveProfile from '@/composables/activeProfile';
-import { computed } from 'vue';
+import { BINDING as B, type Binding } from '@/lib/bindings';
 import { useDeviceManager } from '@/stores/deviceManager';
+import { useEventListener } from '@vueuse/core';
+import { computed, reactive, ref } from 'vue';
 
-defineEmits<(e: 'select', binding: Binding) => void>();
+const props = defineProps<{ buttonSelected: boolean }>();
+const emit = defineEmits<{
+  select: [Binding];
+  drop: [Binding];
+}>();
 
 const CATEGORY = {
   FACE_BUTTONS: 'face buttons',
@@ -123,20 +128,64 @@ const categories = computed(() => {
 
   return categories.filter((category) => category.bindings.length > 0);
 });
+
+const mouseDown = ref(false);
+const lastClicked = ref<Binding | null>(null);
+const draggedButton = ref<Binding | null>(null);
+
+// if a button is selected, emit select
+// otherwise, start drag
+function buttonOnMouseDown(binding: Binding) {
+  if (props.buttonSelected) {
+    emit('select', binding);
+  } else {
+    mouseDown.value = true;
+    lastClicked.value = binding;
+  }
+}
+
+const pos = reactive({ x: 0, y: 0 });
+
+function onMouseMove(e: MouseEvent) {
+  if (!mouseDown.value || !lastClicked.value) return;
+
+  if (!draggedButton.value) draggedButton.value = lastClicked.value;
+
+  pos.x = e.clientX;
+  pos.y = e.clientY;
+}
+
+function onMouseUp() {
+  mouseDown.value = false;
+  if (!draggedButton.value) return;
+
+  emit('drop', draggedButton.value);
+
+  draggedButton.value = null;
+}
+
+useEventListener('mousemove', onMouseMove);
+useEventListener('mouseup', onMouseUp);
 </script>
 
 <template>
   <div class="binding-panel">
-    <div v-for="category in categories" :key="category.name">
-      <span class="category text-lg uppercase">{{ category.name }}</span>
+    <Teleport to="body">
+      <div v-if="draggedButton" class="draggy-button btn" :style="{ top: `${pos.y - 32}px`, left: `${pos.x - 32}px` }">
+        <ButtonContent :binding="draggedButton" />
+      </div>
+    </Teleport>
 
-      <div class="buttons-list flex gap-4 flex-wrap">
+    <div v-for="category in categories" :key="category.name">
+      <span class="category">{{ category.name }}</span>
+
+      <div class="buttons-list">
         <div
           ref="buttons"
-          class="btn h-16 w-16 cursor-pointer"
+          class="btn"
           v-for="binding in category.bindings"
           :key="binding"
-          @click="$emit('select', binding)"
+          @mousedown="buttonOnMouseDown(binding)"
         >
           <ButtonContent :binding />
         </div>
@@ -154,18 +203,11 @@ const categories = computed(() => {
   }
 
   .category {
-    @apply sticky top-0 select-none;
+    @apply sticky top-0 select-none text-lg uppercase;
 
     &::before {
+      @apply absolute -left-4 -right-4 -top-4 h-12;
       content: '';
-
-      position: absolute;
-
-      top: -1rem;
-      right: -1rem;
-      left: -1rem;
-
-      height: 3rem;
 
       z-index: -1;
 
@@ -174,20 +216,24 @@ const categories = computed(() => {
   }
 }
 
+.draggy-button {
+  @apply pointer-events-none absolute opacity-50;
+}
+
+.buttons-list {
+  @apply flex flex-wrap gap-4;
+}
+
+.draggy-button,
 .buttons-list > div {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
+  @apply flex h-16 w-16 cursor-pointer items-center justify-center p-0;
 
   span {
-    font-size: 1.25rem;
-    font-weight: 600;
+    @apply text-xl font-semibold;
   }
 
   svg {
-    width: 1rem;
-    height: 1rem;
+    @apply size-4;
   }
 }
 </style>

@@ -87,6 +87,10 @@ function clearLayout() {
   deviceManager.layout = null;
 }
 
+function resetEmulatedConfig() {
+  localStorage.removeItem('emulated-device-config');
+}
+
 type SubCommand = ['sub', string, Component];
 type FunctionCommand = ['fn', string, () => void];
 
@@ -149,6 +153,7 @@ const commands = {
       toggleDevbar: ['fn', 'Toggle Dev Bar', toggleDevBar],
       testToaster: ['fn', 'Test Toaster', testToaster],
       clearSelectedLayout: ['fn', 'Clear Selected Layout', clearLayout],
+      resetEmulatedConfig: ['fn', 'Reset Emulated Config', resetEmulatedConfig],
     },
   },
 } as const satisfies Commands;
@@ -256,8 +261,8 @@ function getCommands(category: AllCommands[keyof AllCommands]): (FunctionCommand
 <template>
   <Popover :open @update:open="toggle">
     <PopoverAnchor class="absolute top-0" />
-    <PopoverContent class="p-0 w-[600px]" :side-offset="16">
-      <Command v-if="mode === 'main'" :filter-function="(filterFunction as never)">
+    <PopoverContent class="w-[600px] p-0" :side-offset="16">
+      <Command v-if="mode === 'main'" :filter-function="filterFunction as never">
         <CommandInput placeholder="Enter command" />
         <CommandList position="inline">
           <CommandEmpty>No command found</CommandEmpty>

@@ -123,8 +123,8 @@ useEventListener('resize', setMaxWidth);
 
       <TabsContent value="inspector" class="panel scroller">
         <InspectorPanel v-if="editor.selectedButton" :button="editor.selectedButton" />
-        <div v-else class="w-full h-full flex items-center justify-center">
-          <span class="text-tertiary text-lg">Select a button</span>
+        <div v-else class="flex h-full w-full items-center justify-center">
+          <span class="text-lg text-tertiary">Select a button</span>
         </div>
       </TabsContent>
 
@@ -147,14 +147,14 @@ useEventListener('resize', setMaxWidth);
         <PlusIcon />
       </button>
 
-      <div class="flex gap-4 items-center">
+      <div class="flex items-center gap-4">
         <Button @click="importDefaultLayout">Default Layout</Button>
         <Button @click="editor.clear">Clear</Button>
         <Button @click="exportLayout">Export</Button>
         <Button @click="() => open()">Import</Button>
 
         <div class="flex flex-col gap-1">
-          <Label class="uppercase text-sm text-secondary">View layout as</Label>
+          <Label class="text-sm uppercase text-secondary">View layout as</Label>
           <Combobox direction="top" :options="editor.viewModeOptions" v-model="editor.viewMode">
             <template #preview="{ value }">
               <span v-if="value">{{ gameModeToName(value) }}</span>
@@ -172,7 +172,7 @@ useEventListener('resize', setMaxWidth);
 
 <style>
 .editor {
-  @apply grid gap-4 p-4 w-full h-screen overflow-hidden;
+  @apply grid h-screen w-full gap-4 overflow-hidden p-4;
 
   grid-template-columns: 4rem 1fr minmax(350px, auto);
   grid-template-rows: 8rem minmax(0, 1fr) 88px;
@@ -197,7 +197,7 @@ useEventListener('resize', setMaxWidth);
   > footer {
     grid-area: footer;
 
-    @apply flex items-center justify-between bg-secondary rounded-lg p-4;
+    @apply flex items-center justify-between rounded-lg bg-secondary p-4;
 
     > button {
       @apply flex items-center justify-center gap-2;
@@ -209,11 +209,11 @@ useEventListener('resize', setMaxWidth);
   @apply relative flex flex-col flex-nowrap;
 
   > .resize-handle {
-    @apply absolute top-0 -left-2 w-1 h-full cursor-ew-resize z-10 rounded-full transition-colors;
+    @apply absolute -left-2 top-0 z-10 h-full w-1 cursor-ew-resize rounded-full transition-colors;
 
     /* padding on either side */
     &::after {
-      @apply absolute top-0 -left-1 -right-1 h-full;
+      @apply absolute -left-1 -right-1 top-0 h-full;
       content: '';
     }
 
@@ -223,7 +223,7 @@ useEventListener('resize', setMaxWidth);
   }
 
   > .panel {
-    @apply flex flex-col flex-nowrap p-2 gap-4 bg-secondary rounded-lg;
+    @apply flex flex-col flex-nowrap gap-4 rounded-lg bg-secondary p-2;
 
     &[data-state='inactive'] {
       display: none;

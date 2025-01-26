@@ -4,7 +4,7 @@ import type { Layout } from '@/lib/layout';
 export type ConnectionState = 'disconnected' | 'connecting' | 'connected';
 
 export abstract class ConnectionManager {
-  public abstract connect(stateCb: (state: ConnectionState) => void): Promise<boolean>;
+  public abstract connect(stateCb: (state: ConnectionState) => void): Promise<void>;
 
   public abstract disconnect(): Promise<void>;
 

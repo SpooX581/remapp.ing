@@ -19,7 +19,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
   <TagsInputRoot
     v-bind="forwarded"
     class="tags-input"
-    :class="cn('rounded-md border border-floating bg-floating hover:bg-floating-hover transition-colors', props.class)"
+    :class="cn('rounded-md border border-floating bg-floating transition-colors hover:bg-floating-hover', props.class)"
   >
     <slot />
   </TagsInputRoot>
@@ -27,7 +27,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 
 <style>
 .tags-input {
-  @apply flex flex-wrap gap-2 items-center py-2 text-sm;
+  @apply flex flex-wrap items-center gap-2 py-2 text-sm;
 
   &[data-empty='true'] {
     @apply gap-0;
