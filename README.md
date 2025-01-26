@@ -1,6 +1,6 @@
 # remapp.ing
 
-remapp.ing is the **first and only open-source remapper for platform fighting digital controllers**, designed to be the **universal remapping solution** for all HayBox-based controllers. Whether you're remapping built-in game modes, or tweaking SOCD, remapp.ing provides a powerful yet intuitive interface for complete controller customization.
+remapp.ing is an **open-source remapper** designed for **leverless Haybox controllers** (for platform and traditional fighting games). It uses **the Haybox protocol** in conjunction with **Haybox's configuration branch** (soon to be merged to main under **3.0.0**) to generate configuration files that can manipulate the bindings of mapped buttons in the firmware, allowing for users to remap their controllers without editing the original firmware files, all in a beautiful, simple UI.
 
 ---
 
@@ -68,7 +68,7 @@ Give these features a try and take your customization to the next level!
 - Firefox may work with various WebSerial add-ons, however they may not work with remapp.ing.
 
 ### Q: Is this compatible with all GRAM controllers?
-- Yes, remapp.ing supports all GRAM Slim models.  
+- Remapp.ing is designed to work with the GRAM Slim, nanoGRAM, and PRI$M controllers. Any additional controller support is not guaranteed by the maintainers of this project.  
 - As an open-source project, additional controllers will be supported in future updates.
 - Third-party developers can create layouts using the [Visual Editor](https://remapp.ing/editor).
 
