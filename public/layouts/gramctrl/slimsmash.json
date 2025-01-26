@@ -2,249 +2,1057 @@
   "$schema": "../layout_schema.json",
   "name": "GRAM Slim SMASH",
   "pattern": "/GRAM Slim SMASH( \\(Emulated\\))?/i",
-  "viewport": [1000, 600],
+  "viewport": [
+    1000,
+    600
+  ],
   "modes": {
     "melee": {
       "bindings": [
-        [48, "start"],
-        [3, "left_trigger"],
-        [2, "left_stick_left"],
-        [1, "left_stick_down"],
-        [0, "left_stick_right"],
-        [4, "dpad_mod"],
-        [32, "mx"],
-        [33, "my"],
-        [20, "right_trigger"],
-        [21, "y"],
-        [22, "light_shield"],
-        [23, "medium_shield"],
-        [16, "b"],
-        [17, "x"],
-        [18, "z"],
-        [19, "left_stick_up"],
-        [40, "a"],
-        [43, "right_stick_up"],
-        [44, "right_stick_right"],
-        [42, "right_stick_left"],
-        [41, "right_stick_down"],
-        [5, "left_stick_click", "hidden"],
-        [6, "right_stick_click", "hidden"],
-        [7, "capture", "hidden"],
-        [8, "dpad_up", "hidden"],
-        [9, "dpad_down", "hidden"],
-        [10, "dpad_left", "hidden"],
-        [11, "dpad_right", "hidden"],
-        [49, "select", "hidden"],
-        [50, "home", "hidden"]
+        [
+          48,
+          "start"
+        ],
+        [
+          3,
+          "left_trigger"
+        ],
+        [
+          2,
+          "left_stick_left"
+        ],
+        [
+          1,
+          "left_stick_down"
+        ],
+        [
+          0,
+          "left_stick_right"
+        ],
+        [
+          4,
+          "dpad_mod"
+        ],
+        [
+          32,
+          "mx"
+        ],
+        [
+          33,
+          "my"
+        ],
+        [
+          20,
+          "right_trigger"
+        ],
+        [
+          21,
+          "y"
+        ],
+        [
+          22,
+          "light_shield"
+        ],
+        [
+          23,
+          "medium_shield"
+        ],
+        [
+          16,
+          "b"
+        ],
+        [
+          17,
+          "x"
+        ],
+        [
+          18,
+          "z"
+        ],
+        [
+          19,
+          "left_stick_up"
+        ],
+        [
+          40,
+          "a"
+        ],
+        [
+          43,
+          "right_stick_up"
+        ],
+        [
+          44,
+          "right_stick_right"
+        ],
+        [
+          42,
+          "right_stick_left"
+        ],
+        [
+          41,
+          "right_stick_down"
+        ],
+        [
+          5,
+          "left_stick_click",
+          "hidden"
+        ],
+        [
+          6,
+          "right_stick_click",
+          "hidden"
+        ],
+        [
+          7,
+          "capture",
+          "hidden"
+        ],
+        [
+          8,
+          "dpad_up",
+          "hidden"
+        ],
+        [
+          9,
+          "dpad_down",
+          "hidden"
+        ],
+        [
+          10,
+          "dpad_left",
+          "hidden"
+        ],
+        [
+          11,
+          "dpad_right",
+          "hidden"
+        ],
+        [
+          49,
+          "select",
+          "hidden"
+        ],
+        [
+          50,
+          "home",
+          "hidden"
+        ]
       ],
       "socd": [
-        ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
-        ["left_stick_up", "left_stick_down", "second_input_no_reactivation"],
-        ["right_stick_left", "right_stick_right", "second_input_no_reactivation"],
-        ["right_stick_up", "right_stick_down", "second_input_no_reactivation"]
+        [
+          "left_stick_left",
+          "left_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "left_stick_up",
+          "left_stick_down",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_left",
+          "right_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_up",
+          "right_stick_down",
+          "second_input_no_reactivation"
+        ]
       ]
     },
     "project_m": {
       "bindings": [
-        [48, "start"],
-        [3, "left_trigger"],
-        [2, "left_stick_left"],
-        [1, "left_stick_down"],
-        [0, "left_stick_right"],
-        [4, "dpad_mod"],
-        [32, "mx"],
-        [33, "my"],
-        [20, "right_trigger"],
-        [21, "y"],
-        [22, "light_shield"],
-        [23, "dpad_up"],
-        [16, "b"],
-        [17, "x"],
-        [18, "z"],
-        [19, "left_stick_up"],
-        [40, "a"],
-        [43, "right_stick_up"],
-        [44, "right_stick_right"],
-        [42, "right_stick_left"],
-        [41, "right_stick_down"]
+        [
+          48,
+          "start"
+        ],
+        [
+          3,
+          "left_trigger"
+        ],
+        [
+          2,
+          "left_stick_left"
+        ],
+        [
+          1,
+          "left_stick_down"
+        ],
+        [
+          0,
+          "left_stick_right"
+        ],
+        [
+          4,
+          "dpad_mod"
+        ],
+        [
+          32,
+          "mx"
+        ],
+        [
+          33,
+          "my"
+        ],
+        [
+          20,
+          "right_trigger"
+        ],
+        [
+          21,
+          "y"
+        ],
+        [
+          22,
+          "light_shield"
+        ],
+        [
+          23,
+          "dpad_up"
+        ],
+        [
+          16,
+          "b"
+        ],
+        [
+          17,
+          "x"
+        ],
+        [
+          18,
+          "z"
+        ],
+        [
+          19,
+          "left_stick_up"
+        ],
+        [
+          40,
+          "a"
+        ],
+        [
+          43,
+          "right_stick_up"
+        ],
+        [
+          44,
+          "right_stick_right"
+        ],
+        [
+          42,
+          "right_stick_left"
+        ],
+        [
+          41,
+          "right_stick_down"
+        ],
+        [
+          5,
+          "left_stick_click",
+          "hidden"
+        ],
+        [
+          6,
+          "right_stick_click",
+          "hidden"
+        ],
+        [
+          7,
+          "capture",
+          "hidden"
+        ],
+        [
+          9,
+          "dpad_down",
+          "hidden"
+        ],
+        [
+          10,
+          "dpad_left",
+          "hidden"
+        ],
+        [
+          11,
+          "dpad_right",
+          "hidden"
+        ],
+        [
+          49,
+          "select",
+          "hidden"
+        ],
+        [
+          50,
+          "home",
+          "hidden"
+        ]
       ],
       "socd": [
-        ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
-        ["left_stick_up", "left_stick_down", "second_input_no_reactivation"],
-        ["right_stick_left", "right_stick_right", "second_input_no_reactivation"],
-        ["right_stick_up", "right_stick_down", "second_input_no_reactivation"]
+        [
+          "left_stick_left",
+          "left_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "left_stick_up",
+          "left_stick_down",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_left",
+          "right_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_up",
+          "right_stick_down",
+          "second_input_no_reactivation"
+        ]
       ]
     },
     "ultimate": {
       "bindings": [
-        [48, "start"],
-        [3, "left_trigger"],
-        [2, "left_stick_left"],
-        [1, "left_stick_down"],
-        [0, "left_stick_right"],
-        [4, "dpad_mod"],
-        [32, "mx"],
-        [33, "my"],
-        [20, "right_trigger"],
-        [21, "y"],
-        [22, "right_shoulder"],
-        [23, "left_shoulder"],
-        [16, "b"],
-        [17, "x"],
-        [18, "right_shoulder"],
-        [19, "left_stick_up"],
-        [40, "a"],
-        [43, "right_stick_up"],
-        [44, "right_stick_right"],
-        [42, "right_stick_left"],
-        [41, "right_stick_down"]
+        [
+          48,
+          "start"
+        ],
+        [
+          3,
+          "left_trigger"
+        ],
+        [
+          2,
+          "left_stick_left"
+        ],
+        [
+          1,
+          "left_stick_down"
+        ],
+        [
+          0,
+          "left_stick_right"
+        ],
+        [
+          4,
+          "dpad_mod"
+        ],
+        [
+          32,
+          "mx"
+        ],
+        [
+          33,
+          "my"
+        ],
+        [
+          20,
+          "right_trigger"
+        ],
+        [
+          21,
+          "y"
+        ],
+        [
+          22,
+          "right_shoulder"
+        ],
+        [
+          23,
+          "left_shoulder"
+        ],
+        [
+          16,
+          "b"
+        ],
+        [
+          17,
+          "x"
+        ],
+        [
+          18,
+          "right_shoulder"
+        ],
+        [
+          19,
+          "left_stick_up"
+        ],
+        [
+          40,
+          "a"
+        ],
+        [
+          43,
+          "right_stick_up"
+        ],
+        [
+          44,
+          "right_stick_right"
+        ],
+        [
+          42,
+          "right_stick_left"
+        ],
+        [
+          41,
+          "right_stick_down"
+        ],
+        [
+          5,
+          "left_stick_click",
+          "hidden"
+        ],
+        [
+          6,
+          "right_stick_click",
+          "hidden"
+        ],
+        [
+          7,
+          "capture",
+          "hidden"
+        ],
+        [
+          8,
+          "dpad_up",
+          "hidden"
+        ],
+        [
+          9,
+          "dpad_down",
+          "hidden"
+        ],
+        [
+          10,
+          "dpad_left",
+          "hidden"
+        ],
+        [
+          11,
+          "dpad_right",
+          "hidden"
+        ],
+        [
+          49,
+          "select",
+          "hidden"
+        ],
+        [
+          50,
+          "home",
+          "hidden"
+        ]
       ],
       "socd": [
-        ["left_stick_left", "left_stick_right", "second_input"],
-        ["left_stick_up", "left_stick_down", "second_input"],
-        ["right_stick_left", "right_stick_right", "second_input"],
-        ["right_stick_up", "right_stick_down", "second_input"]
+        [
+          "left_stick_left",
+          "left_stick_right",
+          "second_input"
+        ],
+        [
+          "left_stick_up",
+          "left_stick_down",
+          "second_input"
+        ],
+        [
+          "right_stick_left",
+          "right_stick_right",
+          "second_input"
+        ],
+        [
+          "right_stick_up",
+          "right_stick_down",
+          "second_input"
+        ]
       ]
     },
     "fgc": {
       "bindings": [
-        [48, "start"],
-        [3, "left_stick_click"],
-        [2, "left_stick_left"],
-        [1, "left_stick_down"],
-        [0, "left_stick_right"],
-        [32, "left_stick_up"],
-        [20, "x"],
-        [21, "y"],
-        [22, "right_shoulder"],
-        [23, "left_shoulder"],
-        [16, "a"],
-        [17, "b"],
-        [18, "right_trigger"],
-        [19, "left_trigger"],
-        [40, "right_stick_click"],
-        [42, "select"],
-        [41, "home"]
+        [
+          48,
+          "start"
+        ],
+        [
+          3,
+          "left_stick_click"
+        ],
+        [
+          2,
+          "left_stick_left"
+        ],
+        [
+          1,
+          "left_stick_down"
+        ],
+        [
+          0,
+          "left_stick_right"
+        ],
+        [
+          32,
+          "left_stick_up"
+        ],
+        [
+          20,
+          "x"
+        ],
+        [
+          21,
+          "y"
+        ],
+        [
+          22,
+          "right_shoulder"
+        ],
+        [
+          23,
+          "left_shoulder"
+        ],
+        [
+          16,
+          "a"
+        ],
+        [
+          17,
+          "b"
+        ],
+        [
+          18,
+          "right_trigger"
+        ],
+        [
+          19,
+          "left_trigger"
+        ],
+        [
+          40,
+          "right_stick_click"
+        ],
+        [
+          42,
+          "select"
+        ],
+        [
+          41,
+          "home"
+        ],
+        [
+          7,
+          "capture",
+          "hidden"
+        ]
       ],
       "socd": [
-        ["left_stick_left", "left_stick_right", "neutral"],
-        ["left_stick_up", "left_stick_down", "neutral"]
+        [
+          "left_stick_left",
+          "left_stick_right",
+          "neutral"
+        ],
+        [
+          "left_stick_up",
+          "left_stick_down",
+          "neutral"
+        ]
       ]
     },
     "rivals_of_aether": {
       "bindings": [
-        [48, "start"],
-        [3, "left_trigger"],
-        [2, "left_stick_left"],
-        [1, "left_stick_down"],
-        [0, "left_stick_right"],
-        [4, "dpad_mod"],
-        [32, "mx"],
-        [33, "my"],
-        [20, "right_trigger"],
-        [21, "y"],
-        [22, "right_stick_click"],
-        [23, "left_stick_click"],
-        [16, "b"],
-        [17, "x"],
-        [18, "right_shoulder"],
-        [19, "left_stick_up"],
-        [40, "a"],
-        [43, "right_stick_up"],
-        [44, "right_stick_right"],
-        [42, "right_stick_left"],
-        [41, "right_stick_down"]
+        [
+          48,
+          "start"
+        ],
+        [
+          3,
+          "left_trigger"
+        ],
+        [
+          2,
+          "left_stick_left"
+        ],
+        [
+          1,
+          "left_stick_down"
+        ],
+        [
+          0,
+          "left_stick_right"
+        ],
+        [
+          4,
+          "dpad_mod"
+        ],
+        [
+          32,
+          "mx"
+        ],
+        [
+          33,
+          "my"
+        ],
+        [
+          20,
+          "right_trigger"
+        ],
+        [
+          21,
+          "y"
+        ],
+        [
+          22,
+          "right_stick_click"
+        ],
+        [
+          23,
+          "left_stick_click"
+        ],
+        [
+          16,
+          "b"
+        ],
+        [
+          17,
+          "x"
+        ],
+        [
+          18,
+          "right_shoulder"
+        ],
+        [
+          19,
+          "left_stick_up"
+        ],
+        [
+          40,
+          "a"
+        ],
+        [
+          43,
+          "right_stick_up"
+        ],
+        [
+          44,
+          "right_stick_right"
+        ],
+        [
+          42,
+          "right_stick_left"
+        ],
+        [
+          41,
+          "right_stick_down"
+        ],
+        [
+          7,
+          "capture",
+          "hidden"
+        ],
+        [
+          8,
+          "dpad_up",
+          "hidden"
+        ],
+        [
+          9,
+          "dpad_down",
+          "hidden"
+        ],
+        [
+          10,
+          "dpad_left",
+          "hidden"
+        ],
+        [
+          11,
+          "dpad_right",
+          "hidden"
+        ],
+        [
+          49,
+          "select",
+          "hidden"
+        ],
+        [
+          50,
+          "home",
+          "hidden"
+        ]
       ],
       "socd": [
-        ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
-        ["left_stick_up", "left_stick_down", "second_input_no_reactivation"],
-        ["right_stick_left", "right_stick_right", "second_input_no_reactivation"],
-        ["right_stick_up", "right_stick_down", "second_input_no_reactivation"]
+        [
+          "left_stick_left",
+          "left_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "left_stick_up",
+          "left_stick_down",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_left",
+          "right_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_up",
+          "right_stick_down",
+          "second_input_no_reactivation"
+        ]
       ]
     },
     "rivals_of_aether_2": {
       "bindings": [
-        [48, "start"],
-        [3, "left_trigger"],
-        [2, "left_stick_left"],
-        [1, "left_stick_down"],
-        [0, "left_stick_right"],
-        [4, "dpad_mod"],
-        [32, "mx"],
-        [33, "my"],
-        [20, "right_trigger"],
-        [21, "y"],
-        [22, "left_stick_click"],
-        [23, "left_shoulder"],
-        [16, "b"],
-        [17, "x"],
-        [18, "right_shoulder"],
-        [19, "left_stick_up"],
-        [40, "a"],
-        [43, "right_stick_up"],
-        [44, "right_stick_right"],
-        [42, "right_stick_left"],
-        [41, "right_stick_down"],
-        [50, "select", "hidden"],
-        [49, "home", "hidden"]
+        [
+          48,
+          "start"
+        ],
+        [
+          3,
+          "left_trigger"
+        ],
+        [
+          2,
+          "left_stick_left"
+        ],
+        [
+          1,
+          "left_stick_down"
+        ],
+        [
+          0,
+          "left_stick_right"
+        ],
+        [
+          4,
+          "dpad_mod"
+        ],
+        [
+          32,
+          "mx"
+        ],
+        [
+          33,
+          "my"
+        ],
+        [
+          20,
+          "right_trigger"
+        ],
+        [
+          21,
+          "y"
+        ],
+        [
+          22,
+          "left_stick_click"
+        ],
+        [
+          23,
+          "left_shoulder"
+        ],
+        [
+          16,
+          "b"
+        ],
+        [
+          17,
+          "x"
+        ],
+        [
+          18,
+          "right_shoulder"
+        ],
+        [
+          19,
+          "left_stick_up"
+        ],
+        [
+          40,
+          "a"
+        ],
+        [
+          43,
+          "right_stick_up"
+        ],
+        [
+          44,
+          "right_stick_right"
+        ],
+        [
+          42,
+          "right_stick_left"
+        ],
+        [
+          41,
+          "right_stick_down"
+        ],
+        [
+          6,
+          "right_stick_click",
+          "hidden"
+        ],
+        [
+          7,
+          "capture",
+          "hidden"
+        ],
+        [
+          8,
+          "dpad_up",
+          "hidden"
+        ],
+        [
+          9,
+          "dpad_down",
+          "hidden"
+        ],
+        [
+          10,
+          "dpad_left",
+          "hidden"
+        ],
+        [
+          11,
+          "dpad_right",
+          "hidden"
+        ],
+        [
+          49,
+          "select",
+          "hidden"
+        ],
+        [
+          50,
+          "home",
+          "hidden"
+        ]
       ],
       "socd": [
-        ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
-        ["left_stick_up", "left_stick_down", "second_input_no_reactivation"],
-        ["right_stick_left", "right_stick_right", "second_input_no_reactivation"],
-        ["right_stick_up", "right_stick_down", "second_input_no_reactivation"]
+        [
+          "left_stick_left",
+          "left_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "left_stick_up",
+          "left_stick_down",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_left",
+          "right_stick_right",
+          "second_input_no_reactivation"
+        ],
+        [
+          "right_stick_up",
+          "right_stick_down",
+          "second_input_no_reactivation"
+        ]
       ]
     },
     "keyboard": {
       "bindings": [
-        [48, "kb_h"],
-        [3, "kb_a"],
-        [2, "kb_b"],
-        [1, "kb_c"],
-        [0, "kb_d"],
-        [32, "kb_e"],
-        [33, "kb_f"],
-        [20, "kb_j"],
-        [21, "kb_k"],
-        [22, "kb_l"],
-        [23, "kb_m"],
-        [16, "kb_n"],
-        [17, "kb_o"],
-        [18, "kb_p"],
-        [19, "kb_q"],
-        [40, "kb_u"],
-        [43, "kb_r"],
-        [44, "kb_t"],
-        [42, "kb_s"],
-        [41, "kb_v"]
+        [
+          48,
+          "kb_h"
+        ],
+        [
+          3,
+          "kb_a"
+        ],
+        [
+          2,
+          "kb_b"
+        ],
+        [
+          1,
+          "kb_c"
+        ],
+        [
+          0,
+          "kb_d"
+        ],
+        [
+          32,
+          "kb_e"
+        ],
+        [
+          33,
+          "kb_f"
+        ],
+        [
+          20,
+          "kb_j"
+        ],
+        [
+          21,
+          "kb_k"
+        ],
+        [
+          22,
+          "kb_l"
+        ],
+        [
+          23,
+          "kb_m"
+        ],
+        [
+          16,
+          "kb_n"
+        ],
+        [
+          17,
+          "kb_o"
+        ],
+        [
+          18,
+          "kb_p"
+        ],
+        [
+          19,
+          "kb_q"
+        ],
+        [
+          40,
+          "kb_u"
+        ],
+        [
+          43,
+          "kb_r"
+        ],
+        [
+          44,
+          "kb_t"
+        ],
+        [
+          42,
+          "kb_s"
+        ],
+        [
+          41,
+          "kb_v"
+        ]
       ],
       "socd": [
-        ["kb_b", "kb_d", "second_input"],
-        ["kb_e", "kb_r", "second_input"]
+        [
+          "kb_b",
+          "kb_d",
+          "second_input"
+        ],
+        [
+          "kb_e",
+          "kb_r",
+          "second_input"
+        ]
       ]
     }
   },
   "buttons": [
-    [48, 45.47, 15.66],
-    [3, 0.39, 13.74],
-    [2, 9.84, 9.38],
-    [1, 19.49, 10.23],
-    [0, 27.76, 16.3],
-    [4, 21.16, 0.53],
-    [32, 26.38, 39.95],
-    [33, 33.07, 47.09],
-    [20, 61.42, 7.03],
-    [21, 69.69, 1.07],
-    [22, 79.43, 0.43],
-    [23, 89.17, 4.47],
-    [16, 63.09, 17.26],
-    [17, 71.26, 11.08],
-    [18, 81, 10.44],
-    [19, 90.85, 14.6],
-    [40, 62.5, 39.63],
-    [43, 59.74, 29.51],
-    [44, 69.19, 32.5],
-    [42, 52.95, 36.76],
-    [41, 55.71, 46.88]
+    [
+      48,
+      45.47,
+      15.66
+    ],
+    [
+      3,
+      0.39,
+      13.74
+    ],
+    [
+      2,
+      9.84,
+      9.38
+    ],
+    [
+      1,
+      19.49,
+      10.23
+    ],
+    [
+      0,
+      27.76,
+      16.3
+    ],
+    [
+      4,
+      21.16,
+      0.53
+    ],
+    [
+      32,
+      26.38,
+      39.95
+    ],
+    [
+      33,
+      33.07,
+      47.09
+    ],
+    [
+      20,
+      61.42,
+      7.03
+    ],
+    [
+      21,
+      69.69,
+      1.07
+    ],
+    [
+      22,
+      79.43,
+      0.43
+    ],
+    [
+      23,
+      89.17,
+      4.47
+    ],
+    [
+      16,
+      63.09,
+      17.26
+    ],
+    [
+      17,
+      71.26,
+      11.08
+    ],
+    [
+      18,
+      81,
+      10.44
+    ],
+    [
+      19,
+      90.85,
+      14.6
+    ],
+    [
+      40,
+      62.5,
+      39.63
+    ],
+    [
+      43,
+      59.74,
+      29.51
+    ],
+    [
+      44,
+      69.19,
+      32.5
+    ],
+    [
+      42,
+      52.95,
+      36.76
+    ],
+    [
+      41,
+      55.71,
+      46.88
+    ]
   ]
 }
