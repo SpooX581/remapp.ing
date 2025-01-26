@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import CommandPalette from '@/components/CommandPalette.vue';
 import Devbar from '@/components/Devbar.vue';
-import { GithubIcon } from '@/components/icons';
+import { GithubIcon, HeartIcon } from '@/components/icons';
 import { Toaster } from '@/components/ui/toast';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { useDevBar } from '@/composables/devBar';
-import { GITHUB } from '@/lib/links';
+import { GITHUB, DONATE } from '@/lib/links';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { ref, watch } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router';
@@ -81,16 +81,16 @@ watch(route, onRouteSwitch, { immediate: true });
 
     <div class="corner-thing" :class="headerPosition">
       <div class="spacer"></div>
-      <!-- <Tooltip>
+      <Tooltip>
         <TooltipTrigger as-child>
-          <a class="btn icon w-16 h-16" :href="DONATE">
+          <a class="btn icon w-16 h-16" :href="DONATE" target="_blank">
             <HeartIcon class="w-10 h-10" />
           </a>
         </TooltipTrigger>
         <TooltipContent side="right" :collision-padding="8">
           <p>Donate <3</p>
         </TooltipContent>
-      </Tooltip> -->
+      </Tooltip>
       <Tooltip>
         <TooltipTrigger as-child>
           <a class="btn icon h-16 w-16" :href="GITHUB">
