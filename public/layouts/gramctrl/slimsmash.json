@@ -66,7 +66,15 @@
         [43, "right_stick_up"],
         [44, "right_stick_right"],
         [42, "right_stick_left"],
-        [41, "right_stick_down"]
+        [41, "right_stick_down"],
+        [5, "left_stick_click", "hidden"],
+        [6, "right_stick_click", "hidden"],
+        [7, "capture", "hidden"],
+        [9, "dpad_down", "hidden"],
+        [10, "dpad_left", "hidden"],
+        [11, "dpad_right", "hidden"],
+        [49, "select", "hidden"],
+        [50, "home", "hidden"]
       ],
       "socd": [
         ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
@@ -97,7 +105,16 @@
         [43, "right_stick_up"],
         [44, "right_stick_right"],
         [42, "right_stick_left"],
-        [41, "right_stick_down"]
+        [41, "right_stick_down"],
+        [5, "left_stick_click", "hidden"],
+        [6, "right_stick_click", "hidden"],
+        [7, "capture", "hidden"],
+        [8, "dpad_up", "hidden"],
+        [9, "dpad_down", "hidden"],
+        [10, "dpad_left", "hidden"],
+        [11, "dpad_right", "hidden"],
+        [49, "select", "hidden"],
+        [50, "home", "hidden"]
       ],
       "socd": [
         ["left_stick_left", "left_stick_right", "second_input"],
@@ -124,7 +141,8 @@
         [19, "left_trigger"],
         [40, "right_stick_click"],
         [42, "select"],
-        [41, "home"]
+        [41, "home"],
+        [7, "capture", "hidden"]
       ],
       "socd": [
         ["left_stick_left", "left_stick_right", "neutral"],
@@ -153,7 +171,14 @@
         [43, "right_stick_up"],
         [44, "right_stick_right"],
         [42, "right_stick_left"],
-        [41, "right_stick_down"]
+        [41, "right_stick_down"],
+        [7, "capture", "hidden"],
+        [8, "dpad_up", "hidden"],
+        [9, "dpad_down", "hidden"],
+        [10, "dpad_left", "hidden"],
+        [11, "dpad_right", "hidden"],
+        [49, "select", "hidden"],
+        [50, "home", "hidden"]
       ],
       "socd": [
         ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
@@ -185,8 +210,14 @@
         [44, "right_stick_right"],
         [42, "right_stick_left"],
         [41, "right_stick_down"],
-        [50, "select", "hidden"],
-        [49, "home", "hidden"]
+        [6, "right_stick_click", "hidden"],
+        [7, "capture", "hidden"],
+        [8, "dpad_up", "hidden"],
+        [9, "dpad_down", "hidden"],
+        [10, "dpad_left", "hidden"],
+        [11, "dpad_right", "hidden"],
+        [49, "select", "hidden"],
+        [50, "home", "hidden"]
       ],
       "socd": [
         ["left_stick_left", "left_stick_right", "second_input_no_reactivation"],
