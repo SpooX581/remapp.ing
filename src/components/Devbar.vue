@@ -35,7 +35,7 @@ const devBar = useDevBar();
 <style>
 .devbar {
   z-index: 50;
-  @apply absolute transition-[top] flex gap-6 py-4 px-6 select-none justify-center backdrop-blur-md bg-floating-transparent rounded-xl;
+  @apply absolute flex select-none justify-center gap-6 rounded-xl bg-floating-transparent px-6 py-4 backdrop-blur-md transition-[top];
 
   top: -3rem;
 
@@ -53,7 +53,7 @@ const devBar = useDevBar();
   }
 
   a {
-    @apply hover:underline cursor-pointer;
+    @apply cursor-pointer hover:underline;
   }
 
   a,

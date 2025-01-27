@@ -68,27 +68,33 @@ watch(files, async () => {
   <section class="select-layout" :class="sectionPosition">
     <span>
       Couldn't detect layout for device:
-      <code class="bg-secondary py-1 px-2 rounded-lg border border-floating">{{ deviceManager.info?.deviceName }}</code>
+      <code class="rounded-lg border border-floating bg-secondary px-2 py-1">{{ deviceManager.info?.deviceName }}</code>
     </span>
 
-    <div class="grid grid-cols-2 gap-4 h-full">
-      <div class="flex flex-col items-center gap-4 bg-secondary rounded-lg p-4">
+    <div class="mx-4 grid h-full max-w-[1200px] grid-cols-2 gap-4">
+      <div class="flex flex-col items-center gap-4 rounded-lg bg-secondary p-4">
         <span>Select your layout:</span>
 
-        <div class="flex gap-2 w-full items-center justify-center whitespace-nowrap px-2 py-1 flex-wrap">
-          <div v-for="[key, layout] in allLayouts"
-            class="awa flex flex-col gap-2 rounded-md text-floating bg-floating px-4" :key>
-            <button class="text-lg my-2" @click="deviceManager.overrideLayout(layout)">{{ layout.name }}</button>
+        <div class="flex w-full flex-wrap items-center justify-center gap-2 whitespace-nowrap px-2 py-1">
+          <div
+            v-for="[key, layout] in allLayouts"
+            class="awa flex flex-col gap-2 rounded-md bg-floating px-4 text-floating"
+            :key
+          >
+            <button class="my-2 text-lg" @click="deviceManager.overrideLayout(layout)">{{ layout.name }}</button>
           </div>
         </div>
       </div>
 
-      <div ref="drop-zone" class="flex flex-col items-center gap-4 bg-secondary rounded-lg p-4">
+      <div ref="drop-zone" class="flex flex-col items-center gap-4 rounded-lg bg-secondary p-4">
         <span>Or import custom:</span>
 
-        <div role="button"
-          class="flex items-center justify-center rounded-xl border-2 border-dashed p-4 w-full h-full transition-colors hover:border-accent cursor-pointer"
-          :class="{ 'border-accent': isOverDropZone, 'border-floating': !isOverDropZone }" @click="() => open()">
+        <div
+          role="button"
+          class="flex h-full w-full cursor-pointer items-center justify-center rounded-xl border-2 border-dashed p-4 transition-colors hover:border-accent"
+          :class="{ 'border-accent': isOverDropZone, 'border-floating': !isOverDropZone }"
+          @click="() => open()"
+        >
           <Upload class="size-24 text-muted" />
         </div>
       </div>
@@ -137,7 +143,9 @@ watch(files, async () => {
 
 /* todo: these */
 .select-layout > div > a rect {
-  transition: filter 100ms, fill 150ms;
+  transition:
+    filter 100ms,
+    fill 150ms;
   fill: var(--bg-floating);
 }
 

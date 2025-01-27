@@ -40,12 +40,12 @@ We’re excited that you want to contribute to remapp.ing by adding your control
     - `"$schema": "../layout_schema.json",`
   - Next, under each mode remove any lines with bindings that are set to `unspecified`.
     - ![image](https://github.com/user-attachments/assets/f08d3ca6-9345-4005-ab0c-6616fba23e7a)
-  - Give the file a quick format.
   - With a terminal in the root folder of the project, run the following:
     - `pnpm install`
     - `pnpm genIndex`
     - `pnpm dev`
   - This will install the project dependencies, regenerate the index that we use to find each layout, and start a dev server.
+  - Give the file a quick format with `pnpm format:layouts` to make sure it's all nice and neat.
    
 ### Test Your Layout
    - With this new dev server, pull up [http://localhost:5173/](http://localhost:5173/) and verify that your newly added layout works by connecting your controller.

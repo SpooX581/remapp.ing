@@ -32,7 +32,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
   <SelectPortal>
     <SelectContent
       v-bind="{ ...forwarded, ...$attrs }"
-      :class="cn('bigselect-content bg-white dark:bg-floating text-primary dark:text-floating', props.class)"
+      :class="cn('bigselect-content bg-white text-primary dark:bg-floating dark:text-floating', props.class)"
     >
       <SelectViewport
         :class="

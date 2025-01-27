@@ -2,13 +2,19 @@ import { useToast } from '@/components/ui/toast';
 import useActiveProfile from '@/composables/activeProfile';
 import type { ButtonBinding, Config, DeviceInfo, GameModeConfig } from '@/lib/config';
 import type { ConnectionManager, ConnectionState } from '@/lib/device';
-import { EmulatedSerialDeviceManager, SerialDeviceManager } from '@/lib/haybox/device';
+import { EmulatedSerialDeviceManager, SerialDeviceManager, SerialNotSupportedError } from '@/lib/haybox/device';
 import { type Layout, getLayouts } from '@/lib/layout';
 import type { GameMode } from '@/lib/modes';
 import type { SocdPair } from '@/lib/socd';
+import { TimeoutError, withTimeout } from '@/lib/utils';
+import type { ArgumentsType } from '@vueuse/core';
 import type { HayBoxDevice } from 'haybox-webserial';
 import { acceptHMRUpdate, defineStore } from 'pinia';
 import { computed, shallowRef, watch } from 'vue';
+
+const SERIAL_READ_TIMEOUT_MS = 2000;
+
+type Cb = () => void;
 
 export const useDeviceManager = defineStore('device_manager', () => {
   const state = shallowRef<ConnectionState>('disconnected');
@@ -24,9 +30,9 @@ export const useDeviceManager = defineStore('device_manager', () => {
 
   const serial = shallowRef<HayBoxDevice | null>(null);
 
-  const noLayoutFoundCallbacks: (() => void)[] = [];
+  const noLayoutFoundCallbacks: Cb[] = [];
 
-  function onNoLayoutFound(callback: () => void) {
+  function onNoLayoutFound(callback: Cb) {
     noLayoutFoundCallbacks.push(callback);
   }
 
@@ -38,15 +44,15 @@ export const useDeviceManager = defineStore('device_manager', () => {
     }
   }
 
-  watch(state, async () => {
+  async function loadDeviceData() {
     if (state.value !== 'connected' || !manager.value) return;
 
     console.info('loading device info');
 
     try {
-      info.value = (await manager.value.getDeviceInfo()) ?? null;
+      info.value = await withTimeout(manager.value.getDeviceInfo(), SERIAL_READ_TIMEOUT_MS);
 
-      if (!info.value) {
+      if (info.value == null) {
         console.error('failed to get device info');
         const { toast } = useToast();
         toast({
@@ -58,43 +64,72 @@ export const useDeviceManager = defineStore('device_manager', () => {
       }
 
       await loadDeviceLayout(info.value.deviceName);
+
       if (!layout.value) {
         console.warn('no layout found for device:', info.value?.deviceName);
+
         notifyNoLayoutFound();
+
+        return;
       }
     } catch (e) {
-      console.error('failed to get device info', e);
+      await disconnect();
+
+      if (e instanceof TimeoutError) {
+        console.error('timed out getting device info');
+
+        const { toast } = useToast();
+        toast({
+          variant: 'destructive',
+          title: 'Failed to get device info',
+          description: `Connection timed out after ${e.ms}ms`,
+        });
+
+        return;
+      }
+
+      console.error('failed to get device info:\n', e);
 
       const { toast } = useToast();
       toast({
         variant: 'destructive',
-        title: 'Failed to get device info',
+        title: 'Failed to read device info',
         description: 'Check the console for more details',
       });
-    }
-  });
 
-  watch(layout, async () => {
-    if (!layout.value || !manager.value) return;
+      return;
+    }
+
+    loadDeviceConfig();
+
+    notifyConnected();
+  }
+
+  async function loadDeviceConfig() {
+    if (state.value !== 'connected' || !manager.value || !layout.value) return;
 
     try {
-      config.value = (await manager.value.getConfig(layout.value)) ?? null;
+      config.value = await withTimeout(manager.value.getConfig(layout.value), SERIAL_READ_TIMEOUT_MS);
 
       originalConfig.value = config.value ? config.value : null;
 
       console.debug('device info:', info.value);
       console.debug('device config:', config.value);
     } catch (e) {
+      await disconnect();
+
       console.error('failed to get device config', e);
 
       const { toast } = useToast();
       toast({
         variant: 'destructive',
-        title: 'Failed to get device config',
+        title: 'Failed to read device config',
         description: 'Check the console for more details',
       });
+
+      return;
     }
-  });
+  }
 
   const modes = computed<Map<GameMode, GameModeConfig>>(() => {
     if (!config.value) return new Map();
@@ -129,8 +164,12 @@ export const useDeviceManager = defineStore('device_manager', () => {
     }
   }
 
-  function overrideLayout(newLayout: Layout) {
+  async function overrideLayout(newLayout: Layout) {
     layout.value = newLayout;
+
+    await loadDeviceConfig();
+
+    notifyConnected();
   }
 
   async function onConfigChanged() {
@@ -189,19 +228,27 @@ export const useDeviceManager = defineStore('device_manager', () => {
   async function connectEmulated() {
     manager.value = new EmulatedSerialDeviceManager();
     await connectManager();
-    serial.value = (manager.value as EmulatedSerialDeviceManager).getHayboxDevice();
+    if (manager.value) {
+      serial.value = (manager.value as EmulatedSerialDeviceManager).getHayboxDevice();
+    }
   }
 
   async function connect() {
     manager.value = new SerialDeviceManager();
     await connectManager();
-    serial.value = (manager.value as SerialDeviceManager).getHayboxDevice();
+    if (manager.value) {
+      serial.value = (manager.value as SerialDeviceManager).getHayboxDevice();
+    }
   }
 
   async function disconnect() {
     if (!manager.value) return;
 
-    await manager.value.disconnect();
+    try {
+      await manager.value.disconnect();
+    } catch (e) {
+      console.error('failed to disconnect', e);
+    }
 
     state.value = 'disconnected';
 
@@ -217,18 +264,55 @@ export const useDeviceManager = defineStore('device_manager', () => {
   }
 
   async function connectManager() {
-    const success = await manager.value?.connect((newState) => {
-      state.value = newState;
-    });
+    try {
+      await manager.value?.connect((newState) => {
+        state.value = newState;
+      });
 
-    if (success) {
-      notifyConnected();
+      await loadDeviceData();
+    } catch (e) {
+      if (e instanceof DOMException && e.name === 'NotFoundError') {
+        return;
+      }
+
+      const { toast } = useToast();
+
+      const toastOptions: ArgumentsType<typeof toast>[0] = {
+        variant: 'destructive',
+        title: 'Failed to connect',
+      };
+
+      if (e instanceof SerialNotSupportedError) {
+        console.error('Web Serial API not supported');
+        toast({
+          ...toastOptions,
+          title: 'Web Serial API not supported',
+        });
+
+        return;
+      }
+
+      console.error('failed to connect', e);
+
+      if (e instanceof Error) {
+        toast({
+          ...toastOptions,
+          description: e.message,
+        });
+
+        return;
+      }
+
+      toast({
+        ...toastOptions,
+        description: 'Check the console for more details',
+      });
     }
   }
 
-  const connectedCallbacks: (() => void)[] = [];
+  const connectedCallbacks: Cb[] = [];
 
-  function onConnected(callback: () => void) {
+  function onConnected(callback: Cb) {
     connectedCallbacks.push(callback);
   }
 
@@ -240,9 +324,9 @@ export const useDeviceManager = defineStore('device_manager', () => {
     }
   }
 
-  const disconnectedCallbacks: (() => void)[] = [];
+  const disconnectedCallbacks: Cb[] = [];
 
-  function onDisconnected(callback: () => void) {
+  function onDisconnected(callback: Cb) {
     disconnectedCallbacks.push(callback);
   }
 
@@ -276,9 +360,9 @@ export const useDeviceManager = defineStore('device_manager', () => {
 
   // #region config saved
 
-  const configSavedCallbacks: (() => void)[] = [];
+  const configSavedCallbacks: Cb[] = [];
 
-  function onConfigSaved(callback: () => void) {
+  function onConfigSaved(callback: Cb) {
     configSavedCallbacks.push(callback);
   }
 
@@ -361,6 +445,7 @@ export const useDeviceManager = defineStore('device_manager', () => {
   };
 });
 
+// https://pinia.vuejs.org/cookbook/hot-module-replacement.html
 if (import.meta.hot) {
   import.meta.hot.accept(acceptHMRUpdate(useDeviceManager, import.meta.hot));
 }

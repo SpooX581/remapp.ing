@@ -48,8 +48,8 @@ const bindingOptions = computed(() => allBindings.map((value) => ({ value, label
 </script>
 
 <template>
-  <div class="flex flex-col gap-2 mt-2">
-    <Label class="text-secondary font-semibold uppercase">Position</Label>
+  <div class="mt-2 flex flex-col gap-2">
+    <Label class="font-semibold uppercase text-secondary">Position</Label>
     <div class="flex gap-2">
       <DragNumberInput
         label="X"
@@ -71,7 +71,7 @@ const bindingOptions = computed(() => allBindings.map((value) => ({ value, label
   </div>
 
   <div class="flex flex-col gap-2">
-    <Label class="text-secondary font-semibold uppercase">Physical Button</Label>
+    <Label class="font-semibold uppercase text-secondary">Physical Button</Label>
     <Combobox
       :model-value="button.physical"
       @update:model-value="onPhysicalButtonChange"
@@ -89,10 +89,10 @@ const bindingOptions = computed(() => allBindings.map((value) => ({ value, label
   </div>
 
   <div class="flex flex-col gap-2">
-    <Label class="text-secondary font-semibold uppercase">Default bindings</Label>
+    <Label class="font-semibold uppercase text-secondary">Default bindings</Label>
     <div class="flex flex-col gap-2">
-      <div v-for="mode in editor.modes" class="pl-2 flex gap-2 items-center justify-between">
-        <Label class="text-secondary font-semibold">{{ gameModeToName(mode) }}</Label>
+      <div v-for="mode in editor.modes" class="flex items-center justify-between gap-2 pl-2">
+        <Label class="font-semibold text-secondary">{{ gameModeToName(mode) }}</Label>
 
         <BindingCombobox
           class="min-w-[160px]"

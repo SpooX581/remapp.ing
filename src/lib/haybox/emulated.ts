@@ -5,8 +5,8 @@ const EMULATED_CONFIG_KEY = 'emulated-device-config';
 
 export class EmulatedDevice extends HayBoxDevice {
   constructor() {
-    // biome-ignore lint/suspicious/noExplicitAny: not using anything from super
-    super(null as any);
+    // not using anything from super
+    super(null as never);
   }
 
   getDeviceInfo(): Promise<DeviceInfo | null> {

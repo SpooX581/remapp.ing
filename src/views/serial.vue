@@ -115,11 +115,11 @@ function copyLine(line: string) {
 </script>
 
 <template>
-  <div class="w-full h-full flex flex-col p-8 overflow-hidden">
-    <div v-if="deviceManager.serial" class="mt-32 ml-24 h-full flex flex-col gap-4 overflow-hidden">
+  <div class="flex h-full w-full flex-col overflow-hidden p-8">
+    <div v-if="deviceManager.serial" class="ml-24 mt-32 flex h-full flex-col gap-4 overflow-hidden">
       <div
         ref="scroller"
-        class="serial-scroller flex flex-col bg-secondary border border-secondary text-secondary p-2 rounded-md"
+        class="serial-scroller flex flex-col rounded-md border border-secondary bg-secondary p-2 text-secondary"
       >
         <div v-for="line in data">
           <pre>{{ line }}</pre>
@@ -128,7 +128,7 @@ function copyLine(line: string) {
       </div>
 
       <input
-        class="border border-secondary bg-secondary text-secondary p-2 outline-none rounded-md w-full"
+        class="w-full rounded-md border border-secondary bg-secondary p-2 text-secondary outline-none"
         type="text"
         placeholder="Enter command"
         v-model="input"
@@ -136,15 +136,15 @@ function copyLine(line: string) {
       />
     </div>
 
-    <div v-else class="mt-32 ml-24 flex flex-col items-center">
+    <div v-else class="ml-24 mt-32 flex flex-col items-center">
       <h1 class="text-3xl">serial port not connected</h1>
-      <span class="text-2xl text-black mb-8">Hold <b>START</b> while plugging in.</span>
+      <span class="mb-8 text-2xl text-black">Hold <b>START</b> while plugging in.</span>
 
       <button @click="onClick" class="btn gap-4">
         <span>CONNECT</span>
-        <CheckIcon v-if="deviceManager.state == 'connected'" class="w-8 h-8" />
-        <CoggerIcon v-else-if="deviceManager.state == 'connecting'" class="w-8 h-8 animate-spin" />
-        <USBIcon v-else-if="deviceManager.state == 'disconnected'" class="w-8 h-8" />
+        <CheckIcon v-if="deviceManager.state == 'connected'" class="h-8 w-8" />
+        <CoggerIcon v-else-if="deviceManager.state == 'connecting'" class="h-8 w-8 animate-spin" />
+        <USBIcon v-else-if="deviceManager.state == 'disconnected'" class="h-8 w-8" />
       </button>
     </div>
   </div>
@@ -163,17 +163,17 @@ function copyLine(line: string) {
   }
 
   > * {
-    @apply relative w-full shrink-0 transition-colors rounded-md px-2;
+    @apply relative w-full shrink-0 rounded-md px-2 transition-colors;
 
     > button {
-      @apply hidden absolute right-0 bottom-0 bg-floating text-floating rounded-md text-xs py-1 px-2 items-center justify-center;
+      @apply absolute bottom-0 right-0 hidden items-center justify-center rounded-md bg-floating px-2 py-1 text-xs text-floating;
     }
 
     &:hover > button {
       @apply flex;
 
       &:hover {
-        @apply bg-floating-hover rounded-bl-none rounded-tr-none;
+        @apply rounded-bl-none rounded-tr-none bg-floating-hover;
       }
 
       &:active {

@@ -28,7 +28,7 @@ function setMode(mode: ThemeMode) {
 
 <template>
   <div class="theme-settings">
-    <div class="flex p-1 w-full">
+    <div class="flex w-full p-1">
       <button :class="{ active: dark }" @click="setMode('dark')">Dark</button>
       <button :class="{ active: system }" @click="setMode('system')">System</button>
       <button :class="{ active: light }" @click="setMode('light')">Light</button>
@@ -36,9 +36,9 @@ function setMode(mode: ThemeMode) {
 
     <div class="flex flex-col gap-2 px-3 py-2">
       <Label>Set hue</Label>
-      <div class="flex gap-2 items-center">
+      <div class="flex items-center gap-2">
         <Input
-          class="bg-secondary w-24"
+          class="w-24 bg-secondary"
           type="number"
           placeholder="Set hue"
           auto-focus
@@ -55,9 +55,9 @@ function setMode(mode: ThemeMode) {
 
     <div class="flex flex-col gap-2 px-3 py-2">
       <Label>Set chroma</Label>
-      <div class="flex gap-2 items-center">
+      <div class="flex items-center gap-2">
         <Input
-          class="bg-secondary w-24"
+          class="w-24 bg-secondary"
           type="number"
           placeholder="Chroma"
           auto-focus

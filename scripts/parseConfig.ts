@@ -11,6 +11,10 @@ import {
 } from 'haybox-webserial';
 import { readFileSync } from 'node:fs';
 
+// this script is for generating the default config in `src\lib\haybox\config.ts` (used for emulated device)
+// used when the default config is updated in the firmware
+// give it a json file of the config dumped from serial page using getconfig command
+
 const configPath = process.argv[2];
 const data = readFileSync(configPath, 'utf8');
 const config = new Config().fromJsonString(data);

@@ -49,17 +49,17 @@ defineEmits<{
 
 <style>
 .socd-panel {
-  @apply p-4 gap-4;
+  @apply gap-4 p-4;
 
   > div {
-    @apply relative flex flex-col gap-2 p-2 rounded-lg bg-primary border border-floating;
+    @apply relative flex flex-col gap-2 rounded-lg border border-floating bg-primary p-2;
 
     > button {
-      @apply absolute right-2 top-2 text-gray-300 hover:text-red-500 transition-colors;
+      @apply absolute right-2 top-2 text-gray-300 transition-colors hover:text-red-500;
     }
 
     > div {
-      @apply flex flex-row gap-4 items-center;
+      @apply flex flex-row items-center gap-4;
     }
   }
 }
@@ -69,7 +69,7 @@ defineEmits<{
 }
 
 .btn.socd {
-  @apply w-16 h-16;
+  @apply h-16 w-16;
 
   border-width: 2px;
   border-color: lch(50 clamp(100, calc(100 * var(--c)), 200) calc(108 * var(--socd)));

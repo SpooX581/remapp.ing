@@ -22,6 +22,9 @@ const props = defineProps<{
   inEditor?: boolean;
   viewportSize: [number, number];
 }>();
+const emits = defineEmits<{
+  hover: [number | null];
+}>();
 
 const selected = defineModel<number | null>('selected');
 
@@ -94,6 +97,11 @@ watch([x, y], () => {
   }
 
   if (!anyHovered) hoveredElement.value = null;
+});
+
+watch(hoveredElement, (newValue, oldValue) => {
+  if (newValue === oldValue) return;
+  emits('hover', newValue);
 });
 
 const cursor = computed(() => (hoveredElement.value !== null ? 'pointer' : 'default'));
@@ -217,7 +225,7 @@ whenever(esc, () => {
     <div ref="container">
       <svg
         ref="viewport"
-        :class="{ 'bg-something shadow border border-floating': !!inEditor }"
+        :class="{ 'border border-floating bg-something shadow': !!inEditor }"
         :viewBox="`0 0 ${viewportSize[0]} ${viewportSize[1]}`"
         :style="{ cursor }"
         :height="size.height"
@@ -238,10 +246,10 @@ whenever(esc, () => {
 
 <style>
 .layout > div {
-  @apply flex items-center justify-center w-full h-full;
+  @apply flex h-full w-full items-center justify-center;
 
   > svg {
-    @apply max-w-full max-h-full rounded-lg;
+    @apply max-h-full max-w-full rounded-lg;
 
     g {
       transition: filter 0.1s ease;

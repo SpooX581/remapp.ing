@@ -41,7 +41,7 @@ async function main() {
   const index = await walk();
 
   const content = JSON.stringify(index, null, 2);
-  await writeFile(join(LAYOUTS, 'index.json'), content);
+  await writeFile(join(LAYOUTS, 'index.json'), `${content}\n`);
 }
 
 main();

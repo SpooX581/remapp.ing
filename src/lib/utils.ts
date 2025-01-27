@@ -1,7 +1,7 @@
 import type { Serializer } from '@vueuse/core';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { type Ref, onBeforeUpdate, type ComponentPublicInstance, ref } from 'vue';
+import { type ComponentPublicInstance, type Ref, onBeforeUpdate, ref } from 'vue';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -129,4 +129,27 @@ export function readFile(file: File): Promise<string> {
     reader.onabort = () => reject(new Error('aborted'));
     reader.readAsText(file);
   });
+}
+
+export class TimeoutError extends Error {
+  public ms: number;
+
+  constructor(ms: number) {
+    super(`timed out after ${ms}ms`);
+    this.ms = ms;
+    this.name = 'TimeoutError';
+  }
+}
+
+export async function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  let id: ReturnType<typeof setTimeout> | null = null;
+  const timeout = new Promise<T>((_, reject) => {
+    id = setTimeout(() => reject(new TimeoutError(ms)), ms);
+  });
+
+  try {
+    return await Promise.race([promise, timeout]);
+  } finally {
+    if (id != null) clearTimeout(id);
+  }
 }

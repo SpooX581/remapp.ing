@@ -18,7 +18,7 @@ const forwardedProps = useForwardProps(delegatedProps);
   <TagsInputItem
     v-bind="forwardedProps"
     class="tags-input-item"
-    :class="cn('h-6 bg-floating-hover rounded', props.class)"
+    :class="cn('h-6 rounded bg-floating-hover', props.class)"
   >
     <slot />
   </TagsInputItem>

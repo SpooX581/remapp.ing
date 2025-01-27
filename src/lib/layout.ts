@@ -122,7 +122,7 @@ async function loadLayout(entry: LayoutIndex): Promise<Layout> {
     name: data.name,
 
     deviceName: data.deviceName,
-    pattern: data.pattern ? parseRegex(data.pattern) ?? undefined : undefined,
+    pattern: data.pattern ? (parseRegex(data.pattern) ?? undefined) : undefined,
 
     viewport: data.viewport,
 
@@ -219,7 +219,7 @@ export function layoutFromExport(data: LayoutExport): Layout {
     name: data.name,
     deviceName: data.deviceName,
     viewport: data.viewport,
-    pattern: data.pattern ? parseRegex(data.pattern) ?? undefined : undefined,
+    pattern: data.pattern ? (parseRegex(data.pattern) ?? undefined) : undefined,
     buttons: data.buttons.map(([b, x, y]) => [b.toString() as PhysicalButton, x, y]),
     modes: Object.fromEntries(Object.entries(data.modes ?? {}).map(([k, v]) => [k, modeConfigFromExport(v)])),
   };

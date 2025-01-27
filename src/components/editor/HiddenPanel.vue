@@ -32,13 +32,13 @@ function getVirtualBindings(mode: GameMode) {
 
 <template>
   <div v-for="mode in editor.modes" class="flex flex-col gap-2">
-    <div class="flex flex-col p-2 px-3 rounded-lg bg-primary gap-2">
+    <div class="flex flex-col gap-2 rounded-lg bg-primary p-2 px-3">
       <div class="flex flex-col">
-        <Label class="py-2 text-secondary font-semibold uppercase">{{ gameModeToName(mode) }}</Label>
+        <Label class="py-2 font-semibold uppercase text-secondary">{{ gameModeToName(mode) }}</Label>
       </div>
 
       <div class="flex flex-col gap-2 py-2">
-        <Label class="text-secondary font-semibold uppercase">Hidden Buttons</Label>
+        <Label class="font-semibold uppercase text-secondary">Hidden Buttons</Label>
         <TagSelect
           :options="editor.virtualButtonOptions"
           :model-value="getVirtualButtons(mode)"
@@ -53,8 +53,8 @@ function getVirtualBindings(mode: GameMode) {
         </TagSelect>
       </div>
 
-      <div class="flex gap-2 items-center justify-between" v-for="[button, binding] in getVirtualBindings(mode)">
-        <Label class="text-secondary font-semibold uppercase">
+      <div class="flex items-center justify-between gap-2" v-for="[button, binding] in getVirtualBindings(mode)">
+        <Label class="font-semibold uppercase text-secondary">
           {{ displayPhysicalButton(button, editor.naming) }}
         </Label>
         <BindingCombobox

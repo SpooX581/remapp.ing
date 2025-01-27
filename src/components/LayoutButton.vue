@@ -128,7 +128,7 @@ defineExpose({ rect, i: props.data.i });
 }
 
 .layout-button > div {
-  @apply flex items-center justify-center w-full h-full;
+  @apply flex h-full w-full items-center justify-center;
 
   transition-property: border-radius, border-color;
 
@@ -145,7 +145,7 @@ defineExpose({ rect, i: props.data.i });
   }
 
   svg {
-    @apply w-6 h-6;
+    @apply h-6 w-6;
   }
 }
 

@@ -18,23 +18,23 @@ const bindingOptions = computed(() => allBindings.map((value) => ({ value, label
 
 <template>
   <div v-for="mode in editor.modes" class="flex flex-col gap-2">
-    <div class="flex flex-col p-2 rounded-lg bg-primary gap-2">
-      <div class="flex justify-between items-center">
-        <Label class="p-2 text-secondary font-semibold uppercase">{{ gameModeToName(mode) }}</Label>
-        <Button size="icon" variant="ghost" class="hover:bg-floating-hover size-8" @click="editor.addSocdPair(mode)">
+    <div class="flex flex-col gap-2 rounded-lg bg-primary p-2">
+      <div class="flex items-center justify-between">
+        <Label class="p-2 font-semibold uppercase text-secondary">{{ gameModeToName(mode) }}</Label>
+        <Button size="icon" variant="ghost" class="size-8 hover:bg-floating-hover" @click="editor.addSocdPair(mode)">
           <Plus class="size-6" />
         </Button>
       </div>
 
       <div
-        class="relative flex flex-col gap-2 bg-something p-2 rounded-lg"
+        class="relative flex flex-col gap-2 rounded-lg bg-something p-2"
         v-for="(socd, i) in editor.socdPairs.get(mode) ?? []"
       >
-        <div class="absolute top-1 right-1">
+        <div class="absolute right-1 top-1">
           <Button
             size="icon"
             variant="ghost"
-            class="flex items-center justify-center hover:bg-red-500 hover:text-white size-5"
+            class="flex size-5 items-center justify-center hover:bg-red-500 hover:text-white"
             @click="editor.deleteSocdPair(mode, i)"
           >
             <X class="size-4" />
@@ -43,18 +43,18 @@ const bindingOptions = computed(() => allBindings.map((value) => ({ value, label
 
         <div class="grid grid-cols-2 gap-2">
           <div class="flex flex-col gap-2">
-            <Label class="text-secondary font-semibold uppercase">A</Label>
+            <Label class="font-semibold uppercase text-secondary">A</Label>
             <BindingCombobox :options="bindingOptions" v-model="socd.a" close-on-select />
           </div>
 
-          <div class="flex flex-col gap-2 w-full">
-            <Label class="text-secondary font-semibold uppercase">B</Label>
+          <div class="flex w-full flex-col gap-2">
+            <Label class="font-semibold uppercase text-secondary">B</Label>
             <BindingCombobox :options="bindingOptions" v-model="socd.b" close-on-select />
           </div>
         </div>
 
-        <div class="flex flex-col gap-2 w-full">
-          <Label class="text-secondary font-semibold uppercase">Type</Label>
+        <div class="flex w-full flex-col gap-2">
+          <Label class="font-semibold uppercase text-secondary">Type</Label>
           <Combobox :options="editor.socdOptions" v-model="socd.type" close-on-select>
             <template #preview="{ value }">
               <span v-if="value">{{ SOCD_TYPE_NAME[value] }}</span>

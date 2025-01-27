@@ -21,14 +21,14 @@ const forwardedProps = useForwardProps(delegatedProps);
     class="bigselect-trigger"
     :class="
       cn(
-        'bg-white dark:bg-floating dark:hover:bg-floating-hover text-sm data-[placeholder]:text-[#414141]',
+        'bg-white text-sm data-[placeholder]:text-[#414141] dark:bg-floating dark:hover:bg-floating-hover',
         props.class,
       )
     "
   >
     <slot />
     <SelectIcon as-child>
-      <ChevronDown class="w-4 h-4 opacity-50 shrink-0" />
+      <ChevronDown class="h-4 w-4 shrink-0 opacity-50" />
     </SelectIcon>
   </SelectTrigger>
 </template>

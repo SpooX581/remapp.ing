@@ -32,7 +32,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
   <TooltipPortal>
     <TooltipContent
       v-bind="{ ...forwarded, ...$attrs }"
-      :class="cn('tooltip rounded-md border border-floating bg-floating text-floating text-sm shadow-md', props.class)"
+      :class="cn('tooltip rounded-md border border-floating bg-floating text-sm text-floating shadow-md', props.class)"
     >
       <slot />
     </TooltipContent>
