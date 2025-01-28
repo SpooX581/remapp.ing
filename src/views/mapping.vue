@@ -4,12 +4,21 @@ import ProfileSelect from '@/components/ProfileSelect.vue';
 import { BombIcon, SaveIcon } from '@/components/icons';
 import BindingsPanel from '@/components/mapping/BindingsPanel.vue';
 import SocdPanel from '@/components/mapping/SocdPanel.vue';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import useActiveProfile from '@/composables/activeProfile';
 import type { Binding } from '@/lib/bindings';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { useProfile } from '@/stores/profiles';
+import { Microchip, Power, RotateCcw } from 'lucide-vue-next';
 import { computed, ref } from 'vue';
 
 const deviceManager = useDeviceManager();
@@ -100,6 +109,30 @@ const tab = ref<Tab>('bindings');
       </div>
 
       <div class="flex items-center gap-2">
+        <DropdownMenu>
+          <Tooltip>
+            <TooltipTrigger as-child>
+              <DropdownMenuTrigger>
+                <button class="btn icon h-16 w-16" @click="">
+                  <Power class="h-8 w-8" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem @click="deviceManager.reboot()" class="cursor-pointer">
+                  <RotateCcw class="h-4 w-4" />
+                  <span class="text-base">Reboot</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem @click="deviceManager.rebootToBootloader()" class="cursor-pointer">
+                  <Microchip class="h-4 w-4" />
+                  <span class="text-base">Reboot to bootloader</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </TooltipTrigger>
+            <TooltipContent side="top" class="max-w-64 text-center" :collision-padding="8">
+              <p>Reboot</p>
+            </TooltipContent>
+          </Tooltip>
+        </DropdownMenu>
         <Tooltip>
           <TooltipTrigger as-child>
             <button class="btn icon h-16 w-16" @click="profile?.clearMappings()">

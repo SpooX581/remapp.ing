@@ -17,6 +17,8 @@ export class SerialNotSupportedError extends Error {
 }
 
 export class SerialDeviceManager extends ConnectionManager {
+  protected stateCb: ((state: ConnectionState) => void) | undefined;
+
   protected port: SerialPort | null = null;
 
   protected device: hb.HayBoxDevice | null = null;
@@ -28,8 +30,14 @@ export class SerialDeviceManager extends ConnectionManager {
   /* only kept to not lose settings that arent included in the internal config */
   private config: hb.Config | null = null;
 
+  protected setState(state: ConnectionState) {
+    if (this.stateCb) this.stateCb(state);
+  }
+
   public async connect(stateCb: (state: ConnectionState) => void): Promise<void> {
-    stateCb('disconnected');
+    this.stateCb = stateCb;
+
+    this.setState('disconnected');
     this.port = null;
     this.device = null;
 
@@ -38,19 +46,22 @@ export class SerialDeviceManager extends ConnectionManager {
       throw new SerialNotSupportedError();
     }
 
-    stateCb('connecting');
+    this.setState('connecting');
 
     try {
       const newPort = await navigator.serial.requestPort();
 
       console.debug('[serial::connect] new port', newPort);
 
-      stateCb('connected');
+      this.setState('connected');
 
       this.port = newPort;
+      this.port.ondisconnect = () => {
+        console.debug('[serial::connect] port disconnected');
+      };
       this.device = new hb.HayBoxDevice(this.port);
     } catch (err) {
-      stateCb('disconnected');
+      this.setState('disconnected');
       throw err;
     }
   }
@@ -65,7 +76,24 @@ export class SerialDeviceManager extends ConnectionManager {
         console.error('Error closing serial port:', err);
       }
     }
+
     this.port = null;
+
+    this.setState('disconnected');
+  }
+
+  public async reboot(): Promise<void> {
+    if (!this.device) return;
+
+    await this.device.rebootFirmware();
+    this.setState('disconnected');
+  }
+
+  public async rebootToBootloader(): Promise<void> {
+    if (!this.device) return;
+
+    await this.device.rebootBootloader();
+    this.setState('disconnected');
   }
 
   public async getDeviceInfo(): Promise<DeviceInfo | null> {
@@ -175,8 +203,30 @@ function internalToHayboxButtonBinding(layout: Layout, mode: GameMode, binding: 
 
 export class EmulatedSerialDeviceManager extends SerialDeviceManager {
   public connect(stateCb: (state: ConnectionState) => void): Promise<void> {
+    this.stateCb = stateCb;
     this.device = new EmulatedDevice();
-    stateCb('connected');
+    this.setState('connected');
     return Promise.resolve();
+  }
+
+  public async disconnect() {
+    this.device = null;
+    this.setState('disconnected');
+
+    await Promise.resolve();
+  }
+
+  public async reboot(): Promise<void> {
+    await super.reboot();
+
+    // emulate disconnect
+    this.setState('disconnected');
+  }
+
+  public async rebootToBootloader(): Promise<void> {
+    await super.rebootToBootloader();
+
+    // emulate disconnect
+    this.setState('disconnected');
   }
 }

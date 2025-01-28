@@ -8,6 +8,10 @@ export abstract class ConnectionManager {
 
   public abstract disconnect(): Promise<void>;
 
+  public abstract reboot(): Promise<void>;
+
+  public abstract rebootToBootloader(): Promise<void>;
+
   public abstract getDeviceInfo(): Promise<DeviceInfo | null>;
 
   public abstract getConfig(layout: Layout): Promise<Config | null>;

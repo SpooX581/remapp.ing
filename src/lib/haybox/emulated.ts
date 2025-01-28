@@ -3,6 +3,8 @@ import { Config, DeviceInfo, HayBoxDevice } from 'haybox-webserial';
 
 const EMULATED_CONFIG_KEY = 'emulated-device-config';
 
+const EMULATED_DEVICE_AS_PICO = false;
+
 export class EmulatedDevice extends HayBoxDevice {
   constructor() {
     // not using anything from super
@@ -12,7 +14,7 @@ export class EmulatedDevice extends HayBoxDevice {
   getDeviceInfo(): Promise<DeviceInfo | null> {
     return Promise.resolve(
       new DeviceInfo({
-        deviceName: 'GRAM Slim Smash (Emulated)',
+        deviceName: EMULATED_DEVICE_AS_PICO ? 'pico' : 'GRAM Slim Smash (Emulated)',
         firmwareName: 'ChurrOS',
         firmwareVersion: '1.2.3',
       }),

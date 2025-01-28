@@ -19,6 +19,22 @@ type Cb = () => void;
 export const useDeviceManager = defineStore('device_manager', () => {
   const state = shallowRef<ConnectionState>('disconnected');
 
+  watch(state, (newState, oldState) => {
+    if (newState === 'disconnected') {
+      config.value = null;
+      info.value = null;
+      originalConfig.value = null;
+      layout.value = null;
+
+      serial.value = null;
+      manager.value = null;
+
+      if (oldState === 'connected') {
+        notifyDisconnected();
+      }
+    }
+  });
+
   const manager = shallowRef<ConnectionManager | null>(null);
 
   const config = shallowRef<Config | null>(null);
@@ -45,7 +61,7 @@ export const useDeviceManager = defineStore('device_manager', () => {
   }
 
   async function loadDeviceData() {
-    if (state.value !== 'connected' || !manager.value) return;
+    if (state.value !== 'connected' || manager.value == null) return;
 
     console.info('loading device info');
 
@@ -106,7 +122,7 @@ export const useDeviceManager = defineStore('device_manager', () => {
   }
 
   async function loadDeviceConfig() {
-    if (state.value !== 'connected' || !manager.value || !layout.value) return;
+    if (state.value !== 'connected' || manager.value == null || !layout.value) return;
 
     try {
       config.value = await withTimeout(manager.value.getConfig(layout.value), SERIAL_READ_TIMEOUT_MS);
@@ -186,7 +202,7 @@ export const useDeviceManager = defineStore('device_manager', () => {
   watch([config, info], onConfigChanged, { immediate: true });
 
   async function saveConfig(): Promise<boolean> {
-    if (!manager.value || !config.value || !layout.value) return false;
+    if (manager.value == null || !config.value || !layout.value) return false;
 
     writeRemaps();
 
@@ -242,25 +258,13 @@ export const useDeviceManager = defineStore('device_manager', () => {
   }
 
   async function disconnect() {
-    if (!manager.value) return;
+    if (manager.value == null) return;
 
     try {
       await manager.value.disconnect();
     } catch (e) {
       console.error('failed to disconnect', e);
     }
-
-    state.value = 'disconnected';
-
-    config.value = null;
-    info.value = null;
-    originalConfig.value = null;
-    layout.value = null;
-
-    serial.value = null;
-    manager.value = null;
-
-    notifyDisconnected();
   }
 
   async function connectManager() {
@@ -308,6 +312,18 @@ export const useDeviceManager = defineStore('device_manager', () => {
         description: 'Check the console for more details',
       });
     }
+  }
+
+  function reboot() {
+    if (state.value !== 'connected' || manager.value == null) return;
+
+    manager.value.reboot();
+  }
+
+  function rebootToBootloader() {
+    if (state.value !== 'connected' || manager.value == null) return;
+
+    manager.value.rebootToBootloader();
   }
 
   const connectedCallbacks: Cb[] = [];
@@ -430,6 +446,9 @@ export const useDeviceManager = defineStore('device_manager', () => {
     connect,
     connectEmulated,
     disconnect,
+
+    reboot,
+    rebootToBootloader,
 
     onConnected,
     onDisconnected,
