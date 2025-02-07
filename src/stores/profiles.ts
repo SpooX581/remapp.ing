@@ -6,7 +6,7 @@ import { type GameMode, gameModeToStringId } from '@/lib/modes';
 import { SOCD_TYPE, type SocdPair, type SocdType } from '@/lib/socd';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { acceptHMRUpdate, defineStore } from 'pinia';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 export type ButtonState = {
   /* currently hovered */
@@ -252,8 +252,10 @@ export function useProfile(mode: GameMode, layout: Layout) {
       hovered,
       setHovered,
 
+      setBinding,
       setSelectedBinding,
       setHoveredBinding,
+
       setSocdBinding,
       setSocdBindingType,
       addSocd,

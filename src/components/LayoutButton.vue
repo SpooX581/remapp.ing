@@ -6,12 +6,14 @@ import { BUTTON_HEIGHT, BUTTON_WIDTH, SCALE_FACTOR } from '@/lib/utils';
 import { useEditor } from '@/stores/editor';
 import type { ButtonData, ButtonState } from '@/stores/profiles';
 import { computed, useTemplateRef } from 'vue';
+import { X } from 'lucide-vue-next';
 
 const props = defineProps<{
   showSocd: boolean;
   data: ButtonData & ButtonState;
   inEditor?: boolean;
 }>();
+defineEmits(['clear']);
 
 const state = computed(() => {
   if (props.data.isSelected) {
@@ -35,6 +37,9 @@ const y = computed(() => props.data.y * SCALE_FACTOR);
 const width = BUTTON_WIDTH;
 const height = BUTTON_HEIGHT;
 
+const CUTOUT_RADIUS = 8;
+const CUTOUT = 28;
+
 const devBar = useDevBar();
 const editor = useEditor();
 
@@ -45,20 +50,64 @@ defineExpose({ rect, i: props.data.i });
 
 <template>
   <svg :x="x" :y="y" :width :height>
-    <rect ref="rect" :width :height :data-state="state" :data-hover="data.isHover" />
+    <mask id="m" :width :height>
+      <svg :width :height viewBox="0 0 88 88" fill="white">
+        <rect :width :height fill="white"></rect>
+        <rect :x="width - CUTOUT" :width="CUTOUT" :height="CUTOUT" fill="black"></rect>
 
-    <foreignObject class="layout-button" :width :height>
-      <div
-        :data-state="state"
-        :data-hover="data.isHover"
-        :class="{ socd: data.socd !== undefined && showSocd }"
-        :style="{ '--socd': data.socd }"
-      >
+        <rect
+          :x="width - CUTOUT - CUTOUT_RADIUS"
+          :width="CUTOUT_RADIUS + 1"
+          :height="CUTOUT_RADIUS + 1"
+          fill="black"
+        ></rect>
+        <circle :cx="width - CUTOUT - CUTOUT_RADIUS" :cy="CUTOUT_RADIUS" :r="CUTOUT_RADIUS" fill="white"></circle>
+
+        <rect
+          :x="width - CUTOUT - 1"
+          :y="CUTOUT - CUTOUT_RADIUS + 1"
+          :width="CUTOUT_RADIUS + 1"
+          :height="CUTOUT_RADIUS + 1"
+          fill="white"
+        ></rect>
+        <circle
+          :cx="width - CUTOUT + CUTOUT_RADIUS"
+          :cy="CUTOUT - CUTOUT_RADIUS"
+          :r="CUTOUT_RADIUS"
+          fill="black"
+        ></circle>
+
+        <rect
+          :x="width - CUTOUT_RADIUS - 1"
+          :y="CUTOUT - 1"
+          :width="CUTOUT_RADIUS + 1"
+          :height="CUTOUT_RADIUS + 1"
+          fill="black"
+        ></rect>
+        <circle :cx="width - CUTOUT_RADIUS" :cy="CUTOUT + CUTOUT_RADIUS" :r="CUTOUT_RADIUS" fill="white"></circle>
+      </svg>
+    </mask>
+
+    <foreignObject
+      class="layout-button"
+      :width
+      :height
+      :data-state="state"
+      :data-hover="data.isHover"
+      :class="{ socd: data.socd !== undefined && showSocd }"
+      mask="url(#m)"
+    >
+      <div ref="rect" :style="{ '--socd': data.socd }">
         <ButtonContent :binding="data.binding" />
       </div>
       <code v-if="devBar && inEditor">
         {{ data.physical === 'unspecified' ? 'unsp' : displayPhysicalButton(data.physical, editor.naming) }}
       </code>
+    </foreignObject>
+    <foreignObject class="layout-button-corner" :width :height :data-hover="data.isHover">
+      <button @click="$emit('clear')">
+        <X :size="20" />
+      </button>
     </foreignObject>
   </svg>
 </template>
@@ -78,78 +127,93 @@ defineExpose({ rect, i: props.data.i });
   --button-modified: lch(40 35 153);
 }
 
-.layout svg > svg > rect,
-.layout-button > div {
-  transition-duration: 150ms;
-  transition-timing-function: ease-in-out;
+.layout-button {
+  @apply select-none;
 
   --r: 48px;
+  --b: var(--bg-floating);
 
   &[data-hover='true'] {
     --r: 36px;
+    --b: var(--bg-floating-hover);
+
+    > div {
+      border-top-right-radius: 32px;
+    }
+  }
+
+  &[data-hover='false'] {
+    mask: none;
   }
 
   &[data-state='selected'] {
     --r: 36px;
+    --b: var(--button-selected);
+  }
+
+  &[data-state='dirty'] {
+    --b: var(--button-dirty);
+  }
+
+  &[data-state='modified'] {
+    --b: var(--button-modified);
+  }
+
+  &.socd > div {
+    border-color: lch(50, clamp(100, calc(100 * var(--c)), 200), calc(108 * var(--socd)));
+  }
+
+  > div {
+    @apply flex h-full w-full items-center justify-center transition-all;
+
+    border-width: 2px;
+    border-color: transparent;
+
+    border-radius: var(--r);
+    background-color: var(--b);
+
+    span {
+      @apply text-3xl font-semibold;
+    }
+
+    svg {
+      @apply size-6;
+    }
+
+    > code {
+      @apply absolute top-0 text-xs;
+    }
   }
 }
 
-.layout svg > svg {
-  user-select: none;
-
-  rect {
-    transition-property: rx, ry, fill;
-
-    rx: var(--r);
-    ry: var(--r);
-
-    fill: var(--bg-floating);
-
-    &[data-hover='true'] {
-      fill: var(--bg-floating-hover);
-    }
-
-    &[data-state='selected'] {
-      fill: var(--button-selected);
-    }
-
-    &[data-state='dirty'] {
-      fill: var(--button-dirty);
-    }
-
-    &[data-state='modified'] {
-      fill: var(--button-modified);
-    }
-  }
-}
-
-.light .layout-button > div {
+.light .layout-button div {
   border-width: 3px;
 }
 
-.layout-button > div {
-  @apply flex h-full w-full items-center justify-center;
+.layout-button-corner {
+  @apply relative;
 
-  transition-property: border-radius, border-color;
-
-  border-width: 2px;
-  border-radius: var(--r);
-  border-color: transparent;
-
-  &.socd {
-    border-color: lch(50 clamp(100, calc(100 * var(--c)), 200) calc(108 * var(--socd)));
+  &[data-hover='true'] {
+    > button {
+      display: flex;
+    }
   }
 
-  span {
-    @apply text-3xl font-semibold;
-  }
+  > button {
+    @apply absolute right-0 top-0 hidden items-center justify-center bg-floating transition-colors;
+    border-radius: 8px 32px 8px 8px;
+    width: 24px;
+    height: 24px;
+    padding-top: 4px;
+    padding-right: 4px;
 
-  svg {
-    @apply h-6 w-6;
-  }
-}
+    &:hover {
+      @apply bg-floating-hover text-red-500;
+    }
 
-.layout-button > code {
-  @apply absolute top-0 text-xs;
+    &:active {
+      @apply bg-floating-active;
+    }
+  }
 }
 </style>

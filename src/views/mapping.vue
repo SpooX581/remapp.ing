@@ -15,7 +15,7 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import useActiveProfile from '@/composables/activeProfile';
-import type { Binding } from '@/lib/bindings';
+import { BINDING, BINDINGS, type Binding } from '@/lib/bindings';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { useProfile } from '@/stores/profiles';
 import { Microchip, Power, RotateCcw } from 'lucide-vue-next';
@@ -58,6 +58,10 @@ function setSocdBinding(i: number, side: 'a' | 'b') {
   clearSelected();
 }
 
+function onClear(i: number) {
+  profile.value?.setBinding(i, BINDING.UNSPECIFIED);
+}
+
 type Tab = 'bindings' | 'socd';
 
 const tab = ref<Tab>('bindings');
@@ -73,6 +77,7 @@ const tab = ref<Tab>('bindings');
         @update:selected="onClick"
         @hover="profile.setHovered"
         :viewport-size="profile.viewportSize"
+        @clear="onClear"
       />
     </template>
 
