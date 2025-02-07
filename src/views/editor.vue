@@ -109,6 +109,7 @@ useEventListener('resize', setMaxWidth);
       v-model:selected="editor.selected"
       draggable
       :viewport-size="editor.viewportSize"
+      @clear="editor.deleteButton"
     />
 
     <Tabs class="inspector" v-model="tab" :style="{ width: `${inspectorWidth}px` }">

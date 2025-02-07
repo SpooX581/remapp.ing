@@ -22,8 +22,9 @@ const props = defineProps<{
   inEditor?: boolean;
   viewportSize: [number, number];
 }>();
-const emits = defineEmits<{
+const emit = defineEmits<{
   hover: [number | null];
+  clear: [number];
 }>();
 
 const selected = defineModel<number | null>('selected');
@@ -101,7 +102,7 @@ watch([x, y], () => {
 
 watch(hoveredElement, (newValue, oldValue) => {
   if (newValue === oldValue) return;
-  emits('hover', newValue);
+  emit('hover', newValue);
 });
 
 const cursor = computed(() => (hoveredElement.value !== null ? 'pointer' : 'default'));
@@ -238,6 +239,7 @@ whenever(esc, () => {
           :data
           :show-socd="!!showSocd"
           :in-editor="!!inEditor"
+          @clear="$emit('clear', data.i)"
         />
       </svg>
     </div>

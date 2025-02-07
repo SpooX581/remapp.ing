@@ -86,6 +86,7 @@ export function physicalToBinding(layout: Layout, mode: GameMode, button: Physic
 }
 
 export function bindingToPhysical(layout: Layout, mode: GameMode, button: Binding): PhysicalButton {
+  if (button === BINDING.UNSPECIFIED) return PHYSICAL_BUTTON.UNSPECIFIED;
   const physical = layout.modes[mode]?.bindings.find(([_, binding]) => binding === button);
   return physical?.[0] ?? PHYSICAL_BUTTON.UNSPECIFIED;
 }
