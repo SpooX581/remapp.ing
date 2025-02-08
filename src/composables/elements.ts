@@ -7,8 +7,16 @@ export type UseElements = {
   recalculate(i?: number): void;
 };
 
-function calculateBboxes(elements: Ref<IElement[]>) {
+function calculateBboxes(elements: Ref<IElement[]>, children: Ref<ChildElement[]>) {
   if (elements.value.length === 0) return;
+
+  // Sort by the original index order from children
+  const indexMap = new Map(children.value.map((child, idx) => [child.i, idx]));
+  elements.value.sort((a, b) => {
+    const aIdx = indexMap.get(a.i) ?? 0;
+    const bIdx = indexMap.get(b.i) ?? 0;
+    return aIdx - bIdx;
+  });
 
   for (const element of elements.value) {
     if (element != null) element.rect = element.el.getBoundingClientRect();
@@ -24,12 +32,12 @@ export function useElements(container: Ref<Element | null>, children: Ref<ChildE
   const elements = ref<IElement[]>([]);
 
   const resizeObserver = new ResizeObserver(() => {
-    calculateBboxes(elements);
+    calculateBboxes(elements, children);
     triggerRef(elements);
   });
 
   onMounted(() => {
-    calculateBboxes(elements);
+    calculateBboxes(elements, children);
     triggerRef(elements);
 
     if (container.value) {
@@ -41,13 +49,13 @@ export function useElements(container: Ref<Element | null>, children: Ref<ChildE
     // if any child is different, recalculate all
     if (
       children.value.length !== elements.value.length ||
-      // this might not do anything
       children.value.some(({ el, i }) => {
         const element = elements.value[i];
         return !element || element.el !== el || element.i !== i;
       })
     ) {
       elements.value = children.value.map(({ el, i }) => ({ i, el, rect: el.getBoundingClientRect() }));
+      calculateBboxes(elements, children);
       triggerRef(elements);
     }
   });
@@ -56,11 +64,14 @@ export function useElements(container: Ref<Element | null>, children: Ref<ChildE
     resizeObserver.disconnect();
   });
 
-  function recalculate(i: number) {
+  function recalculate(i?: number) {
     if (i !== undefined) {
-      elements.value[i].rect = elements.value[i].el.getBoundingClientRect();
+      const element = elements.value.find(el => el.i === i);
+      if (element) {
+        element.rect = element.el.getBoundingClientRect();
+      }
     } else {
-      calculateBboxes(elements);
+      calculateBboxes(elements, children);
     }
 
     triggerRef(elements);

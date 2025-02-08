@@ -64,22 +64,15 @@ watch([x, y], () => {
   if (props.buttons.length === 0) return;
 
   let anyHovered = false;
+  // Sort elements by Y coordinate in descending order (higher Y = lower on screen = higher priority)
+  const sortedElements = [...elements.value]
+    .map((el, index) => ({ el, button: props.buttons[index] }))
+    .sort((a, b) => (b.button?.y ?? 0) - (a.button?.y ?? 0));
 
-  // this is reversed because the element with the highest index should
-  // be on top due to being the last element added
-  //
-  // if the loop started at 0, every time you have overlapping buttons,
-  // the one you hover would be drawn on bottom of all which looks weird
-  for (let i = elements.value.length - 1; i >= 0; i--) {
-    if (elements.value[i] == null) break;
-    const { rect } = elements.value[i];
-
-    if (anyHovered && hoveredElement.value !== i) {
-      if (getButton(i)?.isHover) {
-        setButton(i, { isHover: false });
-      }
-      continue;
-    }
+  for (const { el, button } of sortedElements) {
+    if (!el) continue;
+    const { rect } = el;
+    const i = button.i;
 
     const hovered =
       x.value >= rect.left && //
@@ -87,13 +80,14 @@ watch([x, y], () => {
       y.value >= rect.top &&
       y.value <= rect.bottom;
 
-    if (hovered) {
+    if (hovered && !anyHovered) {
       anyHovered = true;
       hoveredElement.value = i;
-    }
-
-    if (getButton(i)?.isHover !== hovered) {
-      setButton(i, { isHover: hovered });
+      setButton(i, { isHover: true });
+    } else {
+      if (getButton(i)?.isHover) {
+        setButton(i, { isHover: false });
+      }
     }
   }
 
@@ -234,7 +228,7 @@ whenever(esc, () => {
       >
         <LayoutButton
           :ref="(el) => setElement(el as never, data.i)"
-          v-for="data in buttons"
+          v-for="data in [...buttons].sort((a, b) => a.y - b.y)"
           :key="data.i"
           :data
           :show-socd="!!showSocd"
