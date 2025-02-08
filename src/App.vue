@@ -83,8 +83,8 @@ watch(route, onRouteSwitch, { immediate: true });
       <div class="spacer"></div>
       <Tooltip>
         <TooltipTrigger as-child>
-          <a class="btn icon w-16 h-16" :href="DONATE" target="_blank">
-            <HeartIcon class="w-10 h-10" />
+          <a class="btn icon h-16 w-16" :href="DONATE" target="_blank">
+            <HeartIcon class="h-10 w-10" />
           </a>
         </TooltipTrigger>
         <TooltipContent side="right" :collision-padding="8">
