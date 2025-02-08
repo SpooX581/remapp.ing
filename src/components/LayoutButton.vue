@@ -195,17 +195,27 @@ defineExpose({ rect, i: props.data.i });
 
   &[data-hover='true'] {
     > button {
-      display: flex;
+      visibility: visible;
+      opacity: 1;
+      animation: bounce-in 0.1s cubic-bezier(0.2, 1.8, 0.3, 1) both;
+    }
+  }
+
+  &[data-hover='false'] {
+    > button {
+      animation: bounce-out 0.06s cubic-bezier(0.55, 0, 1, 0.45) both;
     }
   }
 
   > button {
-    @apply absolute right-0 top-0 hidden items-center justify-center bg-floating transition-colors;
+    @apply absolute right-0 top-0 flex items-center justify-center bg-floating;
     border-radius: 8px 32px 8px 8px;
     width: 24px;
     height: 24px;
     padding-top: 4px;
     padding-right: 4px;
+    will-change: transform, opacity;
+    visibility: hidden;
 
     &:hover {
       @apply bg-floating-hover text-red-500;
@@ -214,6 +224,28 @@ defineExpose({ rect, i: props.data.i });
     &:active {
       @apply bg-floating-active;
     }
+  }
+}
+
+@keyframes bounce-in {
+  0% {
+    opacity: 0;
+    transform: translate(3px, -3px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes bounce-out {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(3px, -3px) scale(0.95);
   }
 }
 </style>
