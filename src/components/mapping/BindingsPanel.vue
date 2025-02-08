@@ -123,7 +123,9 @@ const categories = computed(() => {
 
     if (!categoryObj) continue;
 
-    categoryObj.bindings.push(binding);
+    if (!categoryObj.bindings.includes(binding)) {
+      categoryObj.bindings.push(binding);
+    }
   }
 
   return categories.filter((category) => category.bindings.length > 0);
