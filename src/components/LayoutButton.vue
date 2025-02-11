@@ -160,7 +160,7 @@ defineExpose({ rect, i: props.data.i });
   }
 
   &.socd > div {
-    border-color: lch(50, clamp(100, calc(100 * var(--c)), 200), calc(108 * var(--socd)));
+    border-color: lch(50 clamp(100, calc(100 * var(--c)), 200) calc(108 * var(--socd)));
   }
 
   > div {
