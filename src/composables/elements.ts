@@ -66,7 +66,7 @@ export function useElements(container: Ref<Element | null>, children: Ref<ChildE
 
   function recalculate(i?: number) {
     if (i !== undefined) {
-      const element = elements.value.find(el => el.i === i);
+      const element = elements.value.find((el) => el.i === i);
       if (element) {
         element.rect = element.el.getBoundingClientRect();
       }

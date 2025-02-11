@@ -26,14 +26,14 @@ deviceManager.onConfigSaved(() => {
 
 const modes = computed(() => {
   configVersion.value;
-  
+
   return [...deviceManager.modes.values()].map((x) => {
-    const modeConfig = deviceManager.config?.gameModes.find(c => c.id === x.id);
+    const modeConfig = deviceManager.config?.gameModes.find((c) => c.id === x.id);
     return {
       id: x.id,
       name: gameModeToName(x.id),
-      activation: x.activationBinding.map(physical => {
-        const remapped = modeConfig?.buttonRemapping.find(r => r.physical === physical);
+      activation: x.activationBinding.map((physical) => {
+        const remapped = modeConfig?.buttonRemapping.find((r) => r.physical === physical);
         if (remapped) {
           return remapped.binding;
         }
