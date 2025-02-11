@@ -93,9 +93,13 @@ function parseBinding([button, binding, visibility]: NonNullable<
   return [physical, binding];
 }
 
-function parseModeConfigResponse(data: ModeConfigResponse): ModeConfig {
+function parseModeConfigResponse(data: ModeConfigExport | ModeConfigResponse): ModeConfig {
   return {
-    bindings: data.bindings?.map(parseBinding) ?? [],
+    bindings:
+      data.bindings?.map(([b, x, v]) => {
+        const physical = b.toString() as PhysicalButton;
+        return v ? [physical, x, v] : [physical, x];
+      }) ?? [],
     socd: data.socd ?? [],
   };
 }
@@ -206,13 +210,6 @@ export function layoutIdFromName(name: string): string {
   );
 }
 
-function modeConfigFromExport(data: ModeConfigExport): ModeConfig {
-  return {
-    bindings: data.bindings?.map(([b, x]) => [b.toString() as PhysicalButton, x]) ?? [],
-    socd: data.socd ?? [],
-  };
-}
-
 export function layoutFromExport(data: LayoutExport): Layout {
   return {
     id: layoutIdFromName(data.name),
@@ -221,7 +218,7 @@ export function layoutFromExport(data: LayoutExport): Layout {
     viewport: data.viewport,
     pattern: data.pattern ? (parseRegex(data.pattern) ?? undefined) : undefined,
     buttons: data.buttons.map(([b, x, y]) => [b.toString() as PhysicalButton, x, y]),
-    modes: Object.fromEntries(Object.entries(data.modes ?? {}).map(([k, v]) => [k, modeConfigFromExport(v)])),
+    modes: Object.fromEntries(Object.entries(data.modes ?? {}).map(([k, v]) => [k, parseModeConfigResponse(v)])),
   };
 }
 

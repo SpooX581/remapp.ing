@@ -26,7 +26,8 @@ function getVirtualButtons(mode: GameMode) {
 }
 
 function getVirtualBindings(mode: GameMode) {
-  return editor.virtualBindings.get(mode) ?? [];
+  const map = editor.virtualBindings.get(mode);
+  return map ? Array.from(map.entries()) : [];
 }
 </script>
 
