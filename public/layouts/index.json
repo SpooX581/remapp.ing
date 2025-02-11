@@ -1,5 +1,9 @@
 [
   {
+    "name": "nanoGRAM",
+    "path": "gramctrl/nanogram.json"
+  },
+  {
     "name": "PRI$M",
     "path": "gramctrl/prism.json"
   },
