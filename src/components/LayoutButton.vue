@@ -186,10 +186,6 @@ defineExpose({ rect, i: props.data.i });
   }
 }
 
-.light .layout-button div {
-  border-width: 3px;
-}
-
 .layout-button-corner {
   @apply relative;
 
