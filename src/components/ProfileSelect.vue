@@ -11,17 +11,34 @@ import useActiveProfile from '@/composables/activeProfile';
 import { gameModeToName } from '@/lib/modes';
 import { physicalToBinding } from '@/lib/bindings';
 import { useDeviceManager } from '@/stores/deviceManager';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 
 const deviceManager = useDeviceManager();
 const activeProfile = useActiveProfile();
 
+// use ref to force recompute when config is saved
+const configVersion = ref(0);
+
+// register callback to increment version on save
+deviceManager.onConfigSaved(() => {
+  configVersion.value++;
+});
+
 const modes = computed(() => {
+  configVersion.value;
+  
   return [...deviceManager.modes.values()].map((x) => {
+    const modeConfig = deviceManager.config?.gameModes.find(c => c.id === x.id);
     return {
       id: x.id,
       name: gameModeToName(x.id),
-      activation: x.activationBinding,
+      activation: x.activationBinding.map(physical => {
+        const remapped = modeConfig?.buttonRemapping.find(r => r.physical === physical);
+        if (remapped) {
+          return remapped.binding;
+        }
+        return physicalToBinding(deviceManager.layout!, x.id, physical);
+      }),
     };
   });
 });
@@ -38,7 +55,7 @@ const modes = computed(() => {
         <span class="activations">
           <template v-if="deviceManager.layout" v-for="(activation, i) in mode.activation" :key="activation">
             <template v-if="i > 0">+</template>
-            <ButtonContent :binding="physicalToBinding(deviceManager.layout, mode.id, activation)" />
+            <ButtonContent :binding="activation" />
           </template>
         </span>
       </BigSelectItem>
