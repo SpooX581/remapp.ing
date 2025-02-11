@@ -8,6 +8,7 @@ import {
   BigSelectValue,
 } from '@/components/ui/big_select';
 import useActiveProfile from '@/composables/activeProfile';
+import { BINDING } from '@/lib/bindings';
 import { gameModeToName } from '@/lib/modes';
 import { physicalToBinding } from '@/lib/bindings';
 import { useDeviceManager } from '@/stores/deviceManager';
@@ -37,7 +38,7 @@ const modes = computed(() => {
         if (remapped) {
           return remapped.binding;
         }
-        return physicalToBinding(deviceManager.layout!, x.id, physical);
+        return deviceManager.layout ? physicalToBinding(deviceManager.layout, x.id, physical) : BINDING.UNSPECIFIED;
       }),
     };
   });
@@ -53,7 +54,7 @@ const modes = computed(() => {
       <BigSelectItem v-for="mode in modes" :key="mode.id" :value="mode.id">
         <h2>{{ mode.name }}</h2>
         <span class="activations">
-          <template v-if="deviceManager.layout" v-for="(activation, i) in mode.activation" :key="activation">
+          <template v-if="mode.activation?.length" v-for="(activation, i) in mode.activation" :key="i">
             <template v-if="i > 0">+</template>
             <ButtonContent :binding="activation" />
           </template>
