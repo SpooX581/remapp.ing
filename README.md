@@ -5,7 +5,7 @@ remapp.ing is an **open-source remapper** designed for **leverless Haybox contro
 ---
 
 ## Features
-- **First Open-Source HayBox Remapper:** Built to support all HayBox-based controllers and expandable by developers worldwide.
+- **Open-Source HayBox Remapper:** Built to support all HayBox-based controllers and expandable by developers worldwide.
 - **Universal Controller Support:** Easily adapt third-party controllers with our [visual layout editor](https://remapp.ing/editor).
 - **Built-in Game Modes:** Support for several predefined modes, with ongoing additions for even more games.
 - **SOCD Features:** Change SOCD modes for all defined options, and create new ones on the fly.
@@ -27,7 +27,7 @@ Give these features a try and take your customization to the next level!
 1. **Download the Firmware Files:**
    - [Nuke.uf2](https://github.com/Gadgetoid/pico-universal-flash-nuke/releases/download/v1.0.1/universal_flash_nuke.uf2)
    - [firmware.uf2](https://github.com/GRAMCTRL/HayBox-GRAM/releases/)
-     - Please note that if you are not using a GRAM controller then you'll likely want to look for firmware from your controller manufacturer. Make sure that it uses Haybox 3.0.0+!
+     - Please note that if your device is not listed in the releases here, you'll likely want to look for firmware from your controller manufacturer. Make sure that it uses Haybox 3.0.0+!
 2. **Enter Boot Select Mode:**
    - Hold the **A** button on your controller while plugging it into your PC via USB.
       - If you aren't on a GRAM controller, **START** is a common button to enter BOOTSEL mode. Double check with your controller manufacturer if you have any issues with this.
@@ -47,8 +47,9 @@ Give these features a try and take your customization to the next level!
    - Continue to Proceed to remap. Use the interface to:
      - Adjust mappings.
      - Select different modes to remap in the bottom left corner.
-     - Reset your current modes remappings using the **Nuke** button.
+     - Reset your current modes remappings using the **Nuclear Bomb** button.
      - Save your configuration to your controller by clicking the **Floppy Disc Save** icon.
+     - Exit config mode by rebooting your controller from the **Power** button.
 
 ---
 
