@@ -12,7 +12,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-        enabled: true
+        enabled: true,
       },
       injectRegister: 'auto',
       manifest: {
@@ -24,43 +24,43 @@ export default defineConfig({
           {
             src: '/icons/android-chrome-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: '/icons/android-chrome-512x512.png',
             sizes: '512x512',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: '/icons/apple-touch-icon.png',
             sizes: '180x180',
             type: 'image/png',
-            purpose: 'apple touch icon'
+            purpose: 'apple touch icon',
           },
           {
             src: '/icons/favicon-32x32.png',
             sizes: '32x32',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: '/icons/favicon-16x16.png',
             sizes: '16x16',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: '/icons/favicon.ico',
             sizes: '48x48',
-            type: 'image/x-icon'
-          }
+            type: 'image/x-icon',
+          },
         ],
         start_url: '/',
         display: 'standalone',
-        background_color: '#ebebeb'
+        background_color: '#ebebeb',
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf}']
-      }
-    })
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,ttf}'],
+      },
+    }),
   ],
   resolve: {
     alias: {
