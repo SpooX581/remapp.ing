@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Sitemap URLs
+Sitemap: https://remapp.ing/sitemap.xml

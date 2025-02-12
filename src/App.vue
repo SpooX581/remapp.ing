@@ -74,7 +74,7 @@ watch(route, onRouteSwitch, { immediate: true });
         <h3>GRAMCTRL & AEROKEY LABS</h3>
       </div>
 
-      <h3 v-else class="text-2xl">Designed by: GRAMCTRL & AEROKEY LABS</h3>
+      <h2 v-else class="text-2xl">Designed by: GRAMCTRL & AEROKEY LABS</h2>
     </div>
 
     <RouterView />
@@ -83,7 +83,7 @@ watch(route, onRouteSwitch, { immediate: true });
       <div class="spacer"></div>
       <Tooltip>
         <TooltipTrigger as-child>
-          <a class="btn icon h-16 w-16" :href="DONATE" target="_blank">
+          <a class="btn icon h-16 w-16" :href="DONATE" target="_blank" aria-label="Support the project with a donation">
             <HeartIcon class="h-10 w-10" />
           </a>
         </TooltipTrigger>
@@ -93,7 +93,7 @@ watch(route, onRouteSwitch, { immediate: true });
       </Tooltip>
       <Tooltip>
         <TooltipTrigger as-child>
-          <a class="btn icon h-16 w-16" :href="GITHUB">
+          <a class="btn icon h-16 w-16" :href="GITHUB" aria-label="View project on GitHub">
             <GithubIcon class="h-10 w-10" />
           </a>
         </TooltipTrigger>
