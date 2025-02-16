@@ -3,7 +3,7 @@ import type { Binding } from '@/lib/bindings';
 import { PHYSICAL_BUTTON, type PhysicalButton } from '@/lib/buttons';
 import type { GameMode } from '@/lib/modes';
 import type { SocdType } from '@/lib/socd';
-import { parseRegex, readFile } from '@/lib/utils';
+import { MAP_SERIALIZER, parseRegex, readFile } from '@/lib/utils';
 
 export type BindingVisibility = 'hidden';
 
@@ -135,21 +135,69 @@ async function loadLayout(entry: LayoutIndex): Promise<Layout> {
   };
 }
 
-async function loadLayouts(): Promise<Layout[]> {
-  const res = await fetch('/layouts/index.json');
-  const index: LayoutIndex[] = await res.json();
+const LAYOUT_INDEX_CACHE_KEY = 'layoutIndex';
+const LAYOUTS_CACHE_KEY = 'layouts';
 
-  const layouts: Layout[] = [];
+function cacheLayoutIndex(index: LayoutIndex[]) {
+  localStorage.setItem(LAYOUT_INDEX_CACHE_KEY, JSON.stringify(index));
+}
+
+function cacheLayouts(layouts: Map<string, Layout>) {
+  localStorage.setItem(LAYOUTS_CACHE_KEY, MAP_SERIALIZER.write(layouts));
+}
+
+function getCachedLayoutIndex(): LayoutIndex[] | null {
+  const index = localStorage.getItem(LAYOUT_INDEX_CACHE_KEY);
+  if (!index) return null;
+  return JSON.parse(index);
+}
+
+function getCachedLayouts(): Map<string, Layout> | null {
+  const layouts = localStorage.getItem(LAYOUTS_CACHE_KEY);
+  if (!layouts) return null;
+  return MAP_SERIALIZER.read(layouts);
+}
+
+async function loadLayouts(): Promise<Layout[]> {
+  let index: LayoutIndex[] | null;
+  try {
+    const res = await fetch('/layouts/index.json');
+    index = (await res.json()) as LayoutIndex[];
+    cacheLayoutIndex(index);
+  } catch (e) {
+    console.warn('Failed to load layout index:', e);
+    index = getCachedLayoutIndex();
+  }
+
+  if (index == null) {
+    console.warn('Failed to load cached layout index');
+    index = [];
+  }
+
+  const layouts: Map<string, Layout> = getCachedLayouts() ?? new Map();
+  const cachedLayoutsNotFound = layouts.size === 0;
 
   for (const entry of index) {
     try {
-      layouts.push(await loadLayout(entry));
+      layouts.set(entry.path, await loadLayout(entry));
     } catch (e) {
-      console.error(`Failed to load layout: ${entry.path}`, e);
+      console.warn(`Failed to load layout: ${entry.path}`, e);
     }
   }
 
-  return layouts;
+  if (cachedLayoutsNotFound && layouts.size === 0) {
+    const { toast } = useToast();
+
+    toast({
+      variant: 'destructive',
+      title: 'Failed to load layouts',
+      description: 'No cached layouts found.',
+    });
+  }
+
+  cacheLayouts(layouts);
+
+  return Array.from(layouts.values());
 }
 
 const layouts: Map<string, Layout> = new Map();
