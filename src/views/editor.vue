@@ -74,10 +74,10 @@ const { open, files, reset } = useFileDialog({
 
 async function importDefaultLayout() {
   const layouts = await getLayouts();
-  const first = layouts.values().next().value;
-  if (!first) return;
-
-  editor.importFromLayout(first);
+  const slimLayout = layouts.get('gram-slim-smash');
+  if (slimLayout) {
+    editor.importFromLayout(slimLayout);
+  }
 }
 
 watch(files, async () => {
