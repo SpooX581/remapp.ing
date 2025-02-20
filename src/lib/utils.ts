@@ -56,6 +56,13 @@ function replacer(_: string, value: Map<unknown, unknown> | Set<unknown> | unkno
     };
   }
 
+  if (value instanceof RegExp) {
+    return {
+      dataType: 'RegExp',
+      value: value.toString(),
+    };
+  }
+
   return value;
 }
 
@@ -69,7 +76,12 @@ type SetValue = {
   value: Iterable<unknown>;
 };
 
-type ReviverValue = MapValue | SetValue;
+type RegExpValue = {
+  dataType: 'RegExp';
+  value: string;
+};
+
+type ReviverValue = MapValue | SetValue | RegExpValue;
 
 function reviver(_: string, value: ReviverValue) {
   if (typeof value === 'object' && value !== null) {
@@ -79,6 +91,10 @@ function reviver(_: string, value: ReviverValue) {
 
     if (value.dataType === 'Set') {
       return new Set(value.value);
+    }
+
+    if (value.dataType === 'RegExp') {
+      return parseRegex(value.value);
     }
   }
 
