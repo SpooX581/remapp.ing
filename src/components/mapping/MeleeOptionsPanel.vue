@@ -83,7 +83,7 @@ watch(
   <div>
     <div class="flex flex-col gap-4">
       <div class="flex items-center gap-2">
-        <Label class="w-full font-semibold uppercase text-secondary">True Z Press</Label>
+        <Label class="w-full font-semibold uppercase text-secondary">Crouch Walk OS</Label>
         <Checkbox v-model:checked="options.crouchWalkOs" />
 
         <Tooltip>
@@ -92,12 +92,7 @@ watch(
           </TooltipTrigger>
           <TooltipContent side="right" align="start" class="flex max-w-80 flex-col gap-2 p-2 text-sm">
             <p>
-              Set to true to make a Z input output an actual Z button press rather than the default analog shield + A
-              grab macro.
-            </p>
-            <p>
-              The default macro behaviour allows you to L cancel with Z without being locked out of tech, and true Z is
-              still accessible by pressing Mod X and Z at the same time.
+              Set to true to enable downward diagonal coordinate which will cause you to enter walk state if you are hit while crouching.
             </p>
           </TooltipContent>
         </Tooltip>
