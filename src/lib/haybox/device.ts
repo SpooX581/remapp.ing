@@ -1,5 +1,5 @@
 import { bindingToPhysical, physicalToBinding } from '@/lib/bindings';
-import type { ButtonBinding, Config, DeviceInfo, GameModeConfig } from '@/lib/config';
+import type { ButtonBinding, Config, DeviceInfo, GameModeConfig, MeleeOptions, ProjectMOptions } from '@/lib/config';
 import { ConnectionManager, type ConnectionState } from '@/lib/device';
 import { BUTTON_TO_HAYBOX, HAYBOX_TO_BUTTON } from '@/lib/haybox/buttons';
 import { EmulatedDevice } from '@/lib/haybox/emulated';
@@ -131,16 +131,24 @@ export class SerialDeviceManager extends ConnectionManager {
 
     const defaultMode = config.gameModeConfigs[defaultModeIdx - 1];
 
+    const projectMOptions = hayboxToInternalProjectMOptions(layout, config.projectMOptions);
+    const meleeOptions = hayboxToInternalMeleeOptions(layout, config.meleeOptions);
+
     return {
       gameModes: config.gameModeConfigs.map((c) => hayboxToInternalGameMode(layout, c)),
       defaultMode: HAYBOX_TO_MODE[defaultMode.modeId],
+      projectMOptions,
+      meleeOptions,
     };
   }
 
   public async setConfig(layout: Layout, config: Config): Promise<boolean> {
     if (!this.device || !this.config) return false;
 
-    this.config.gameModeConfigs = config.gameModes.map((mode) => internalGameModeToHaybox(this.config, layout, mode));
+    this.config.gameModeConfigs = config.gameModes.map((mode) => internalToHayboxGameMode(this.config, layout, mode));
+
+    this.config.projectMOptions = internalToHayboxProjectMOptions(config.projectMOptions);
+    this.config.meleeOptions = internalToHayboxMeleeOptions(config.meleeOptions);
 
     return await this.device.setConfig(this.config);
   }
@@ -172,8 +180,13 @@ function hayboxToInternalGameMode(layout: Layout, config: hb.GameModeConfig): Ga
   };
 }
 
-function internalGameModeToHaybox(config: hb.Config | null, layout: Layout, mode: GameModeConfig): hb.GameModeConfig {
+function internalToHayboxGameMode(config: hb.Config | null, layout: Layout, mode: GameModeConfig): hb.GameModeConfig {
+  if (mode.name == null) {
+    throw new Error('Game mode name cannot be null');
+  }
+
   const previous = config?.gameModeConfigs.find((c) => c.modeId === MODE_TO_HAYBOX[mode.id]) ?? new hb.GameModeConfig();
+
   return new hb.GameModeConfig({
     modeId: MODE_TO_HAYBOX[mode.id],
     name: mode.name,
@@ -199,6 +212,76 @@ function internalToHayboxButtonBinding(layout: Layout, mode: GameMode, binding: 
     physicalButton: BUTTON_TO_HAYBOX[binding.physical],
     activates: BUTTON_TO_HAYBOX[bindingToPhysical(layout, mode, binding.binding)],
   });
+}
+
+function internalToHayboxProjectMOptions({
+  enabled,
+  trueZPress,
+  disableLedgedashSocdOverride,
+  customAirdodge,
+}: ProjectMOptions): hb.ProjectMOptions | undefined {
+  if (!enabled) return undefined;
+
+  const clampCoord = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
+
+  const airdodge =
+    customAirdodge == null
+      ? undefined
+      : new hb.Coords({ x: clampCoord(customAirdodge.x), y: clampCoord(customAirdodge.y) });
+
+  return new hb.ProjectMOptions({
+    trueZPress,
+    disableLedgedashSocdOverride,
+    customAirdodge: airdodge,
+  });
+}
+
+function hayboxToInternalProjectMOptions(layout: Layout, options?: hb.ProjectMOptions): ProjectMOptions {
+  if (options == null) return layout.projectMOptions;
+
+  const airdodge = options.customAirdodge == null ? null : { x: options.customAirdodge.x, y: options.customAirdodge.y };
+
+  return {
+    enabled: true,
+    trueZPress: options.trueZPress,
+    disableLedgedashSocdOverride: options.disableLedgedashSocdOverride,
+    customAirdodge: airdodge,
+  };
+}
+
+function internalToHayboxMeleeOptions({
+  enabled,
+  crouchWalkOs,
+  disableLedgedashSocdOverride,
+  customAirdodge,
+}: MeleeOptions): hb.MeleeOptions | undefined {
+  if (!enabled) return undefined;
+
+  const clampCoord = (value: number) => Math.max(0, Math.min(100, Math.round(value)));
+
+  const airdodge =
+    customAirdodge == null
+      ? undefined
+      : new hb.Coords({ x: clampCoord(customAirdodge.x), y: clampCoord(customAirdodge.y) });
+
+  return new hb.MeleeOptions({
+    crouchWalkOs,
+    disableLedgedashSocdOverride,
+    customAirdodge: airdodge,
+  });
+}
+
+function hayboxToInternalMeleeOptions(layout: Layout, options?: hb.MeleeOptions): MeleeOptions {
+  if (options == null) return layout.meleeOptions;
+
+  const airdodge = options.customAirdodge == null ? null : { x: options.customAirdodge.x, y: options.customAirdodge.y };
+
+  return {
+    enabled: true,
+    crouchWalkOs: options.crouchWalkOs,
+    disableLedgedashSocdOverride: options.disableLedgedashSocdOverride,
+    customAirdodge: airdodge,
+  };
 }
 
 export class EmulatedSerialDeviceManager extends SerialDeviceManager {

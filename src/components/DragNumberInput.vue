@@ -16,7 +16,7 @@ const props = defineProps<{
   max?: number;
 }>();
 
-const modelValue = defineModel<string | number>('modelValue');
+const modelValue = defineModel<string | number>('modelValue', { default: 0 });
 
 let mouseDown = false;
 

@@ -1,12 +1,20 @@
 import { BINDING, type Binding } from '@/lib/bindings';
 import { PHYSICAL_BUTTON, type PhysicalButton, allPhysicalButtons } from '@/lib/buttons';
 import {
+  DEFAULT_MELEE_OPTIONS,
+  DEFAULT_PROJECT_M_OPTIONS,
+  type MeleeOptions,
+  type ProjectMOptions,
+} from '@/lib/config';
+import {
   type Layout,
   type LayoutExport,
   type ModeConfig,
   type ModeConfigExport,
+  exportMeleeOptions,
   exportModeConfig,
   exportPhysical,
+  exportProjectMOptions,
 } from '@/lib/layout';
 import { GAME_MODE, type GameMode, allModes, gameModeToName } from '@/lib/modes';
 import { DISPLAY_PHYSICAL_MODE, type DisplayPhysicalMode, displayPhysicalButton } from '@/lib/physicalDisplay';
@@ -22,7 +30,7 @@ import {
 import type { ButtonData, ButtonState } from '@/stores/profiles';
 import { useLocalStorage } from '@vueuse/core';
 import { acceptHMRUpdate, defineStore } from 'pinia';
-import { computed, onBeforeMount, ref, watch } from 'vue';
+import { computed, onBeforeMount, reactive, ref, watch } from 'vue';
 
 export type EditorButtonData = {
   mappings: Map<GameMode, Binding>;
@@ -268,6 +276,9 @@ export const useEditor = defineStore('editor', () => {
     }
   }
 
+  const projectMOptions = ref<ProjectMOptions>(DEFAULT_PROJECT_M_OPTIONS);
+  const meleeOptions = ref<MeleeOptions>(DEFAULT_MELEE_OPTIONS);
+
   function exportToLayout(): LayoutExport {
     const layoutModes: Map<GameMode, ModeConfig> = new Map();
 
@@ -315,6 +326,8 @@ export const useEditor = defineStore('editor', () => {
       viewport: viewportSize.value,
       modes: exportModes,
       buttons: buttons.value.map((button) => [exportPhysical(button.physical), button.x, button.y]),
+      projectMOptions: exportProjectMOptions(projectMOptions.value),
+      meleeOptions: exportMeleeOptions(meleeOptions.value),
     };
 
     return layout;
@@ -399,6 +412,9 @@ export const useEditor = defineStore('editor', () => {
     buttons.value = newButtons;
     socdPairs.value = newSocdPairs;
 
+    projectMOptions.value = { ...layout.projectMOptions };
+    meleeOptions.value = { ...layout.meleeOptions };
+
     console.info('Imported layout:', layout);
   }
 
@@ -418,6 +434,9 @@ export const useEditor = defineStore('editor', () => {
     buttons.value = [];
     socdPairs.value = new Map();
     selected.value = null;
+
+    projectMOptions.value = { ...DEFAULT_PROJECT_M_OPTIONS };
+    meleeOptions.value = { ...DEFAULT_MELEE_OPTIONS };
   }
 
   return {
@@ -458,6 +477,9 @@ export const useEditor = defineStore('editor', () => {
 
     addSocdPair,
     deleteSocdPair,
+
+    projectMOptions,
+    meleeOptions,
 
     exportToLayout,
     importFromLayout,

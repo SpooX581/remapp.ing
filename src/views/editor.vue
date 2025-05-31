@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Combobox from '@/components/Combobox.vue';
 import LayoutContainer from '@/components/LayoutContainer.vue';
+import HiddenPanel from '@/components/editor/HiddenPanel.vue';
 import InspectorPanel from '@/components/editor/InspectorPanel.vue';
 import PropertiesPanel from '@/components/editor/PropertiesPanel.vue';
 import SocdPanel from '@/components/editor/SocdPanel.vue';
-import HiddenPanel from '@/components/editor/HiddenPanel.vue';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -74,9 +74,14 @@ const { open, files, reset } = useFileDialog({
 
 async function importDefaultLayout() {
   const layouts = await getLayouts();
-  const slimLayout = layouts.get('gram-slim-smash');
-  if (slimLayout) {
+
+  // default layout key
+  const slimLayout = layouts.get('gramctrl_slimsmash');
+
+  if (slimLayout != null) {
     editor.importFromLayout(slimLayout);
+  } else {
+    console.error('Default layout not found, available layouts:', Array.from(layouts.keys()));
   }
 }
 

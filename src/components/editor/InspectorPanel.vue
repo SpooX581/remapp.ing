@@ -32,7 +32,8 @@ function onPosChanged(x: string | number, y: string | number) {
   editor.updateButton(props.button.i, { x: Number(x), y: Number(y) });
 }
 
-function onModeChange(mode: GameMode, binding: Binding) {
+function onModeChange(mode: GameMode, binding?: Binding) {
+  if (binding == null) return;
   editor.setModeBinding(props.button.i, mode, binding);
 }
 
@@ -40,7 +41,8 @@ function getSelectedBinding(mode: GameMode) {
   return props.button.mappings.get(mode) ?? BINDING.UNSPECIFIED;
 }
 
-function onPhysicalButtonChange(physical: PhysicalButton) {
+function onPhysicalButtonChange(physical?: PhysicalButton) {
+  if (physical == null) return;
   editor.updateButton(props.button.i, { physical });
 }
 

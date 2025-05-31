@@ -1,10 +1,10 @@
 import { useToast } from '@/components/ui/toast';
 import useActiveProfile from '@/composables/activeProfile';
-import type { ButtonBinding, Config, DeviceInfo, GameModeConfig } from '@/lib/config';
+import type { ButtonBinding, Config, DeviceInfo, GameModeConfig, MeleeOptions, ProjectMOptions } from '@/lib/config';
 import type { ConnectionManager, ConnectionState } from '@/lib/device';
 import { EmulatedSerialDeviceManager, SerialDeviceManager, SerialNotSupportedError } from '@/lib/haybox/device';
 import { type Layout, getLayouts } from '@/lib/layout';
-import type { GameMode } from '@/lib/modes';
+import { type GameMode } from '@/lib/modes';
 import type { SocdPair } from '@/lib/socd';
 import { TimeoutError, withTimeout } from '@/lib/utils';
 import type { ArgumentsType } from '@vueuse/core';
@@ -157,7 +157,7 @@ export const useDeviceManager = defineStore('device_manager', () => {
     const layouts = await getLayouts();
 
     for (const [_, l] of layouts) {
-      if (l.deviceName) {
+      if (l.deviceName != null) {
         if (l.deviceName === name) {
           layout.value = l;
           break;
@@ -205,6 +205,7 @@ export const useDeviceManager = defineStore('device_manager', () => {
     if (manager.value == null || !config.value || !layout.value) return false;
 
     writeRemaps();
+    writeOptions();
 
     try {
       if (await manager.value.setConfig(layout.value, config.value)) {
@@ -394,11 +395,13 @@ export const useDeviceManager = defineStore('device_manager', () => {
 
   // #region remap
 
-  type ConfigWriteCb = () => {
+  type RemappedConfig = {
     mode: GameMode;
     buttons: ButtonBinding[];
     socd: SocdPair[];
   };
+
+  type ConfigWriteCb = () => RemappedConfig;
 
   const requestRemappedCallbacks: ConfigWriteCb[] = [];
 
@@ -410,8 +413,12 @@ export const useDeviceManager = defineStore('device_manager', () => {
     if (!config.value) return;
     console.debug('device::writeRemaps');
 
+    console.info('remapping config:', config.value);
+
     for (const getModifiedMappings of requestRemappedCallbacks) {
       const remapped = getModifiedMappings();
+
+      console.info('remapped config:', remapped);
 
       const i = config.value.gameModes.findIndex((c) => c.id === remapped.mode);
 
@@ -422,6 +429,39 @@ export const useDeviceManager = defineStore('device_manager', () => {
 
       config.value.gameModes[i].buttonRemapping = remapped.buttons;
       config.value.gameModes[i].socdPairs = remapped.socd;
+    }
+  }
+
+  // #endregion
+
+  // #region options
+
+  type AllOptions = {
+    meleeOptions: MeleeOptions;
+    projectMOptions: ProjectMOptions;
+  };
+
+  type OptionsWriteCb = () => AllOptions;
+
+  const requestOptionsCallbacks: OptionsWriteCb[] = [];
+
+  function onRequestOptions(callback: OptionsWriteCb) {
+    requestOptionsCallbacks.push(callback);
+  }
+
+  function writeOptions() {
+    if (!config.value) return;
+    console.debug('device::writeOptions');
+
+    console.info('remapping options:', config.value);
+
+    for (const getModifiedOptions of requestOptionsCallbacks) {
+      const modified = getModifiedOptions();
+
+      console.info('remapped options:', modified);
+
+      config.value.meleeOptions = modified.meleeOptions;
+      config.value.projectMOptions = modified.projectMOptions;
     }
   }
 
@@ -458,6 +498,7 @@ export const useDeviceManager = defineStore('device_manager', () => {
     onConfigLoaded,
     onConfigSaved,
     onRequestRemapped,
+    onRequestOptions,
 
     // todo: something better
     serial,

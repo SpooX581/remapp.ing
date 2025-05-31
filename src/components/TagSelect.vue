@@ -61,6 +61,8 @@ function filterFunction(_: TValue[], query: string): TValue[] {
   return sortResults.map((result) => result.obj[VALUE_KEY]);
 }
 
+const untypedFilterFunction = filterFunction as never;
+
 function refreshResults() {
   filterFunction([], '');
 }
@@ -120,7 +122,7 @@ const displayedModelValue = computed(() => {
       v-model:open="open"
       v-model:search-term="searchTerm"
       class="w-full"
-      :filter-function="filterFunction as never"
+      :filter-function="untypedFilterFunction"
     >
       <ComboboxAnchor as-child>
         <ComboboxInput placeholder="Search" as-child>
@@ -136,7 +138,9 @@ const displayedModelValue = computed(() => {
       <ComboboxPortal>
         <ComboboxContent>
           <CommandList :side-offset="5" position="popper" class="tag-select-list">
-            <CommandEmpty><slot name="empty" /></CommandEmpty>
+            <CommandEmpty>
+              <slot name="empty" />
+            </CommandEmpty>
 
             <CommandGroup>
               <template v-for="result in results">
@@ -147,7 +151,9 @@ const displayedModelValue = computed(() => {
                   @select.prevent="onSelect(result.obj.value)"
                 >
                   <div class="tag-select-item-content">
-                    <div><slot name="item" :value="result.obj.value" :html="resultLabelHtml(result)" /></div>
+                    <div>
+                      <slot name="item" :value="result.obj.value" :html="resultLabelHtml(result)" />
+                    </div>
                     <span class="id" v-html="resultValueHtml(result)"></span>
                   </div>
                 </CommandItem>

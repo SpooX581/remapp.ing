@@ -4,6 +4,7 @@ import { PHYSICAL_BUTTON, type PhysicalButton } from '@/lib/buttons';
 import type { GameMode } from '@/lib/modes';
 import type { SocdType } from '@/lib/socd';
 import { MAP_SERIALIZER, parseRegex, readFile } from '@/lib/utils';
+import { DEFAULT_MELEE_OPTIONS, DEFAULT_PROJECT_M_OPTIONS, type MeleeOptions, type ProjectMOptions } from './config';
 
 export type BindingVisibility = 'hidden';
 
@@ -22,6 +23,18 @@ export type LayoutResponse = {
 
   buttons?: [number, number, number][];
   modes?: Partial<{ [key in GameMode]: ModeConfigResponse }>;
+
+  projectMOptions?: {
+    trueZPress: boolean;
+    disableLedgedashSocdOverride: boolean;
+    customAirdodge?: [number, number];
+  };
+
+  meleeOptions?: {
+    crouchWalkOs: boolean;
+    disableLedgedashSocdOverride: boolean;
+    customAirdodge?: [number, number];
+  };
 };
 
 export type ModeConfig = {
@@ -40,6 +53,9 @@ export type Layout = {
 
   buttons: [PhysicalButton, number, number][];
   modes: Partial<{ [key in GameMode]: ModeConfig }>;
+
+  projectMOptions: ProjectMOptions;
+  meleeOptions: MeleeOptions;
 };
 
 type Range<N extends number, R extends unknown[] = []> = R['length'] extends N
@@ -68,6 +84,40 @@ export function exportModeConfig(data: ModeConfig): ModeConfigExport {
   };
 }
 
+type Coords = [number, number];
+
+export type ProjectMOptionsExport = {
+  trueZPress: boolean;
+  disableLedgedashSocdOverride: boolean;
+  customAirdodge?: Coords;
+};
+
+export type MeleeOptionsExport = {
+  crouchWalkOs: boolean;
+  disableLedgedashSocdOverride: boolean;
+  customAirdodge?: Coords;
+};
+
+export function exportProjectMOptions(data: ProjectMOptions): ProjectMOptionsExport | undefined {
+  if (!data.enabled) return undefined;
+
+  return {
+    trueZPress: data.trueZPress,
+    disableLedgedashSocdOverride: data.disableLedgedashSocdOverride,
+    customAirdodge: data.customAirdodge ? [data.customAirdodge.x, data.customAirdodge.y] : undefined,
+  };
+}
+
+export function exportMeleeOptions(data: MeleeOptions): MeleeOptionsExport | undefined {
+  if (!data.enabled) return undefined;
+
+  return {
+    crouchWalkOs: data.crouchWalkOs,
+    disableLedgedashSocdOverride: data.disableLedgedashSocdOverride,
+    customAirdodge: data.customAirdodge ? [data.customAirdodge.x, data.customAirdodge.y] : undefined,
+  };
+}
+
 export type LayoutExport = {
   name: string;
   viewport: [number, number];
@@ -77,6 +127,9 @@ export type LayoutExport = {
 
   buttons: [PhysicalButtonExport, number, number][];
   modes: Partial<{ [key in GameMode]: ModeConfigExport }>;
+
+  projectMOptions?: ProjectMOptionsExport;
+  meleeOptions?: MeleeOptionsExport;
 };
 
 export type LayoutIndex = { name: string; path: string };
@@ -114,6 +167,34 @@ function parseLayoutResponseModes(data?: LayoutResponse['modes']): Layout['modes
   return Object.fromEntries(Object.entries(data ?? {}).map(([k, v]) => [k as GameMode, parseModeConfigResponse(v)]));
 }
 
+function parseLayoutResponseProjectMOptions(data?: LayoutResponse['projectMOptions']): ProjectMOptions {
+  if (!data) return DEFAULT_PROJECT_M_OPTIONS;
+
+  const { trueZPress, disableLedgedashSocdOverride } = data;
+  const customAirdodge = data.customAirdodge ? { x: data.customAirdodge[0], y: data.customAirdodge[1] } : null;
+
+  return {
+    enabled: true,
+    trueZPress,
+    disableLedgedashSocdOverride,
+    customAirdodge,
+  };
+}
+
+function parseLayoutResponseMeleeOptions(data?: LayoutResponse['meleeOptions']): MeleeOptions {
+  if (!data) return DEFAULT_MELEE_OPTIONS;
+
+  const { crouchWalkOs, disableLedgedashSocdOverride } = data;
+  const customAirdodge = data.customAirdodge ? { x: data.customAirdodge[0], y: data.customAirdodge[1] } : null;
+
+  return {
+    enabled: true,
+    crouchWalkOs,
+    disableLedgedashSocdOverride,
+    customAirdodge,
+  };
+}
+
 async function loadLayout(entry: LayoutIndex): Promise<Layout> {
   const res = await fetch(`/layouts/${entry.path}`);
   const data: LayoutResponse = await res.json();
@@ -132,6 +213,9 @@ async function loadLayout(entry: LayoutIndex): Promise<Layout> {
 
     buttons: parseLayoutResponseButtons(data.buttons),
     modes: parseLayoutResponseModes(data.modes),
+
+    projectMOptions: parseLayoutResponseProjectMOptions(data.projectMOptions),
+    meleeOptions: parseLayoutResponseMeleeOptions(data.meleeOptions),
   };
 }
 
@@ -267,6 +351,8 @@ export function layoutFromExport(data: LayoutExport): Layout {
     pattern: data.pattern ? (parseRegex(data.pattern) ?? undefined) : undefined,
     buttons: data.buttons.map(([b, x, y]) => [b.toString() as PhysicalButton, x, y]),
     modes: Object.fromEntries(Object.entries(data.modes ?? {}).map(([k, v]) => [k, parseModeConfigResponse(v)])),
+    projectMOptions: parseLayoutResponseProjectMOptions(data.projectMOptions),
+    meleeOptions: parseLayoutResponseMeleeOptions(data.meleeOptions),
   };
 }
 

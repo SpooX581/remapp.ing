@@ -136,9 +136,10 @@ function copyLine(line: string) {
       />
     </div>
 
-    <div v-else class="ml-24 mt-32 flex flex-col items-center">
-      <h1 class="text-3xl">serial port not connected</h1>
-      <span class="mb-8 text-2xl text-black">Hold <b>START</b> while plugging in.</span>
+    <div v-else class="ml-24 flex h-full flex-col items-center justify-center gap-6">
+      <h1 class="text-3xl">Serial port not connected</h1>
+
+      <span class="mb-4 text-2xl text-primary">Hold <b>START</b> while plugging in.</span>
 
       <button @click="onClick" class="btn gap-4">
         <span>CONNECT</span>

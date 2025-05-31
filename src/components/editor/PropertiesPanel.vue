@@ -5,10 +5,12 @@ import TagSelect from '@/components/TagSelect.vue';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PHYSICAL_BUTTON, allPhysicalButtons } from '@/lib/buttons';
-import { gameModeToName } from '@/lib/modes';
+import { GAME_MODE, gameModeToName } from '@/lib/modes';
 import { DISPLAY_PHYSICAL_MODE_NAME, allDisplayPhysicalModes, displayPhysicalButton } from '@/lib/physicalDisplay';
 import { useEditor } from '@/stores/editor';
 import { computed } from 'vue';
+import ProjectMOptionsPanel from '@/components/mapping/ProjectMOptionsPanel.vue';
+import MeleeOptionsPanel from '@/components/mapping/MeleeOptionsPanel.vue';
 
 const editor = useEditor();
 
@@ -31,6 +33,9 @@ function onViewportResize(w?: string | number, h?: string | number) {
   if (w !== undefined) editor.viewportSize[0] = Number(w);
   if (h !== undefined) editor.viewportSize[1] = Number(h);
 }
+
+const showProjectMOptions = computed(() => editor.modes.has(GAME_MODE.PROJECT_M));
+const showMeleeOptions = computed(() => editor.modes.has(GAME_MODE.MELEE));
 </script>
 
 <template>
@@ -103,9 +108,41 @@ function onViewportResize(w?: string | number, h?: string | number) {
     <Label class="font-semibold uppercase text-secondary">Modes</Label>
     <TagSelect :options="editor.modeOptions" v-model="editor.modes">
       <template #tag="{ value }">{{ gameModeToName(value) }}</template>
+
       <template #item="{ html }"><span v-html="html" /></template>
 
       <template #empty>No results</template>
     </TagSelect>
   </div>
+
+  <!-- project m options -->
+  <div class="flex flex-col gap-2" v-if="showProjectMOptions">
+    <Label class="font-semibold uppercase text-secondary">Project M Options</Label>
+    <div class="sub-panel">
+      <ProjectMOptionsPanel :options="editor.projectMOptions" />
+    </div>
+  </div>
+
+  <!-- melee options -->
+  <div class="flex flex-col gap-2" v-if="showMeleeOptions">
+    <Label class="font-semibold uppercase text-secondary">Melee Options</Label>
+    <div class="sub-panel">
+      <MeleeOptionsPanel :options="editor.meleeOptions" />
+    </div>
+  </div>
 </template>
+
+<style>
+.sub-panel {
+  @apply rounded-md border border-floating bg-floating p-3 text-floating shadow-md;
+
+  *[role='checkbox'],
+  input {
+    @apply border-secondary bg-secondary text-secondary hover:bg-floating-hover;
+
+    &[data-state='checked'] {
+      @apply bg-floating-hover;
+    }
+  }
+}
+</style>

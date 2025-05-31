@@ -63,7 +63,7 @@ function getVirtualBindings(mode: GameMode) {
           :options="bindingOptions"
           :model-value="binding"
           close-on-select
-          @update:model-value="editor.setVirtualBinding(mode, button, $event)"
+          @update:model-value="editor.setVirtualBinding(mode, button, $event!)"
         />
       </div>
     </div>

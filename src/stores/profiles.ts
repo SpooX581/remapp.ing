@@ -6,7 +6,7 @@ import { type GameMode, gameModeToStringId } from '@/lib/modes';
 import { SOCD_TYPE, type SocdPair, type SocdType } from '@/lib/socd';
 import { useDeviceManager } from '@/stores/deviceManager';
 import { acceptHMRUpdate, defineStore } from 'pinia';
-import { computed, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 
 export type ButtonState = {
   /* currently hovered */
@@ -216,7 +216,7 @@ export function useProfile(mode: GameMode, layout: Layout) {
     deviceManager.onConfigSaved(onConfigSaved);
 
     deviceManager.onRequestRemapped(() => ({
-      mode: mode,
+      mode,
       buttons: getRemappedButtons(),
       socd: socd.value.map(({ a, b, type }) => ({ a, b, type })),
     }));
